@@ -15,11 +15,15 @@
 
 # include "MLX42/include/MLX42/MLX42.h"
 # include "libft/include/libft.h"
+# include "cub3d_types.h"
 # include <math.h>
 # include <fcntl.h>
 # include <sys/types.h>
 # include <sys/uio.h>
 # include <unistd.h>
 # include <stdio.h>
+
+int error(char *msg);
+t_data *init_data();
 
 #endif

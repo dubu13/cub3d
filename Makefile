@@ -1,14 +1,14 @@
 # Name of the binary
-NAME     = so_long
-
-NAME_BONUS = so_long_bonus
+NAME     = cub3d
 
 # Compiler and flags
 CC       = cc
 CFLAGS   = -Wall -Werror -Wextra -g
 
 # MLX42 Flags
-MLXFLAGS = -ldl -lglfw -pthread -lm
+MLXFLAGS = -lXext -lX11 -lm -lbsd -lglfw -lpthread
+
+LIBFT = ./libft/libft.a
 
 # Binary Folder
 BINDIR = bin
@@ -20,14 +20,18 @@ SRCS     = $(wildcard *.c)
 OBJS     = $(SRCS:%.c=$(BINDIR)/%.o)
 
 # MLX42 library
-MLX      = ./MLX42/build/libmlx42.a
+MLX      = ./MLX42/build/libmlx42.a 
 
 # Default target
 all: $(NAME)
 
 $(NAME): $(HEADER) $(MLX) $(OBJS)
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(MLX) $(MLXFLAGS) $(HEADER)
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(MLX) $(MLXFLAGS) $(HEADER)
 	@echo $(GREEN)"Building $(NAME)"$(DEFAULT);
+
+# Create bin directory if it doesn't exist
+$(BINDIR):
+	@mkdir -p $(BINDIR)
 
 # MLX42 library
 $(MLX):
@@ -36,13 +40,13 @@ $(MLX):
       cd MLX42 && cmake -B build && cmake --build build -j4; \
 	fi
 
-%.o: %.c
+# Compile .c files into .o files
+$(BINDIR)/%.o: %.c | $(BINDIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-#Linking libft
+# Linking libft
 $(HEADER):
 	@make -C libft
-
 
 submodule:
 	git submodule update --init --recursive
@@ -64,8 +68,7 @@ fclean: clean
 re: fclean all
 	@echo $(GREEN)"Rebuilding everything"$(DEFAULT);
 
-re_bonus: fclean bonus
-.PHONY: all clean fclean re re_bonus
+.PHONY: all clean fclean re
 
 # Colours
 DEFAULT = "\033[39m"
