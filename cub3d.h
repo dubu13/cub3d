@@ -25,5 +25,9 @@
 
 int error(char *msg);
 t_data *init_data();
-
+int is_direction_positive(float angle, char axis);
+int get_step_direction(float angle, float *increment, float *step, char axis);
+void  set_steps(float angle, float *x_step, float *y_step, char axis);
+void set_position(t_cub *cub, float angle, float *x, float *y, char axis);
+void set_step_direction(float angle, float *x_step, float *y_step, char axis);
 #endif
