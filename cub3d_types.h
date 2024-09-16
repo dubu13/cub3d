@@ -12,35 +12,41 @@
 
 typedef struct s_player
 {
-    int p_x;
-    int p_y;
-    double angle;
-    float  fov;
-}   t_player;
+	int		p_x;
+	int		p_y;
+	double	angle;
+	float	fov;
+}	t_player;
 
 typedef struct s_ray
 {
-    double angle;
-    double distance;
-    int wall_hit;
-}   t_ray;
+	double	angle;
+	double	distance;
+	int		wall_hit;
+}	t_ray;
 
 typedef struct s_data
 {
-    char    **map;
-    int     width;
-    int     height;
-    int     pos_x;
-    int     pos_y;
-}   t_data;
+	char	**map;
+	char	*no_texture;
+	char	*so_texture;
+	char	*we_texture;
+	char	*ea_texture;
+	int		floor_color[3];
+	int		ceiling_color[3];
+	int		width;
+	int		height;
+	int		pos_x;
+	int		pos_y;
+}	t_data;
 
 typedef struct s_cub
 {
-    mlx_t     *mlx;
-    mlx_image_t *img;
-    t_player *player;
-    t_ray *ray;
-    t_data *data;
-}   t_cub;
+	mlx_t		*mlx;
+	mlx_image_t	*img;
+	t_player	*player;
+	t_ray		*ray;
+	t_data		*data;
+}	t_cub;
 
 #endif
