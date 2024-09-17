@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:43:35 by dhasan            #+#    #+#             */
-/*   Updated: 2024/09/16 19:00:18 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/09/17 23:21:54 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,47 @@ void	parse_color(char *contect, int *color)
 	color[2] = ft_atoi(rgb[2]);
 }
 
+void	save_map_size(int fd, t_data *data)
+{
+	char	*line;
+	int		i;
+
+	i = 0;
+	line = skip_info(fd);
+	while (line)
+	{
+		if (line[0] == '\0' || line[0] == '\n')
+			exit_error("Error\nInvalid map.\n", 1);
+		while (line[i])
+		{
+			if (!ft_strchr(" 012NSEW", line[i]))
+				exit_error("Error\nInvalid map.\n", 1);
+			i++;
+		}
+		if (i > data->width)
+			data->width = i;
+		data->height++;
+		free(line);
+		line = get_next_line(fd);
+	}
+	free(line);
+}
+
 void	parse_map(int fd, t_data *data)
 {
-	
+	char	*line;
+	int		y;
+
+	save_map_size(fd, data);
+	data->map = ft_calloc(data->height, sizeof(char *));
+	line = skip_info(fd);
+	while (line && y < data->height)
+	{
+		data->map[y] = ft_strdup(line);
+		free(line);
+		line = get_next_line(fd);
+		y++;
+	}
 }
 
 void	read_file(char *file, t_data *data)
@@ -68,5 +106,6 @@ void	read_file(char *file, t_data *data)
 		free(contect);
 		contect = skip_nl(fd);
 	}
+	free(contect);
 	close(fd);
 }

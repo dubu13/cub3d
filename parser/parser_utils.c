@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:45:31 by dhasan            #+#    #+#             */
-/*   Updated: 2024/09/16 16:45:50 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/09/17 23:22:14 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,17 @@ bool	is_color(char *contect)
 	if (!ft_strncmp(contect, "C ", 2))
 		return (true);
 	return (false);
+}
+
+char	*skip_info(int fd)
+{
+	char	*line;
+
+	line = get_next_line(fd);
+	while (line && (is_texture(line) || *line == "F" || *line == "C"))
+	{
+		free(line);
+		line = get_next_line(fd);
+	}
+	return (line);
 }
