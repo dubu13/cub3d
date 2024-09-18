@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:53:31 by dhasan            #+#    #+#             */
-/*   Updated: 2024/09/16 16:43:59 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/09/18 19:52:29 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,13 @@ void	msg_exit(char *msg, int exit_code)
 {
 	printf("%s\n", msg);
 	exit(exit_code);
+}
+
+void	parser(char *file, t_data *data)
+{
+	check_extension(file);
+	read_file(file, data);
+	is_map_enclosed(data);
 }
 
 int	main(int argc, char **argv)
@@ -31,15 +38,5 @@ int	main(int argc, char **argv)
 		printf("Usage: %s <map_file.cub>\n", argv[0]);
 		return (1);
 	}
-	//check file extension ".cub"
-	check_extension(argv[1]);
-	//is file exist and readable
-	read_file(argv[1], data);
-	//parse textures (no, so, we, ea) and store the paths
-	//parse the floor(F) and ceiling(C) colors ande store them
-	//! red, gree, blue (RGB); range is 0-255!
-	//read the map and store it in a 2D array
-	//is map enclosed by walls?
-	//store the player's position and orientation
-	//for data struct : map(2d), textures(no, so, we, ea), colors(F, C), player(pos, orientation)
+	parser(argv[1], data);
 }

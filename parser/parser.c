@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:43:35 by dhasan            #+#    #+#             */
-/*   Updated: 2024/09/17 23:21:54 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/09/18 19:48:00 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,10 @@ void	save_map_size(int fd, t_data *data)
 			exit_error("Error\nInvalid map.\n", 1);
 		while (line[i])
 		{
-			if (!ft_strchr(" 012NSEW", line[i]))
-				exit_error("Error\nInvalid map.\n", 1);
+			if (!ft_strchr(" 01NSEW", line[i]))
+				exit_error("Error\nMap with invalid char.\n", 1);
+			if (ft_strchr("NSEW", line[i]))
+				save_position(data, i, data->height);
 			i++;
 		}
 		if (i > data->width)
@@ -69,6 +71,8 @@ void	parse_map(int fd, t_data *data)
 	char	*line;
 	int		y;
 
+	map->pos.x = -1;
+	map->pos.y = -1;
 	save_map_size(fd, data);
 	data->map = ft_calloc(data->height, sizeof(char *));
 	line = skip_info(fd);
