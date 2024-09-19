@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:43:35 by dhasan            #+#    #+#             */
-/*   Updated: 2024/09/18 19:48:00 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/09/19 15:48:27 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,8 @@ void	parse_map(int fd, t_data *data)
 	char	*line;
 	int		y;
 
-	map->pos.x = -1;
-	map->pos.y = -1;
+	data->pos_x = -1;
+	data->pos_y = -1;
 	save_map_size(fd, data);
 	data->map = ft_calloc(data->height, sizeof(char *));
 	line = skip_info(fd);

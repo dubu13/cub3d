@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 11:58:20 by dkremer           #+#    #+#             */
-/*   Updated: 2024/09/16 16:47:22 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/09/19 16:26:53 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,17 @@ void	set_steps(float angle, float *x_step, float *y_step, char axis);
 void	set_position(t_cub *cub, float angle, float *x, float *y, char axis);
 void	set_step_direction(float angle, float *x_step, float *y_step, char axis);
 
+//
+void	msg_exit(char *msg, int exit_code);
+//checker.c
+void	is_map_enclosed(t_data *data);
+bool	check_color(char **rgb);
+bool	check_texture(char *contect);
+void	check_extension(char *file);
+//parser_utils.c
+char	*skip_nl(int fd);
+bool	is_texture(char *contect);
+bool	is_color(char *contect);
+char	*skip_info(int fd);
+void	save_position(t_data *data, unsigned int x, unsigned int y);
 #endif

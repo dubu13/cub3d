@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:55:47 by dhasan            #+#    #+#             */
-/*   Updated: 2024/09/18 19:50:37 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/09/19 15:50:04 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,10 @@ void	check_around_position(t_data *data, unsigned int x, unsigned int y)
 {
 	if (x == 0 || x == data->width - 1 || y == 0 || y == data->height - 1)
 		msg_exit("Error\nMap is not enclosed by walls.\n", 1);
-	else if (map->data[y - 1][x - 1] == ' ' || map->data[y - 1][x] == ' ' || \
-		map->data[y - 1][x + 1] == ' ' || map->data[y][x - 1] == ' ' || \
-		map->data[y][x + 1] == ' ' || map->data[y + 1][x - 1] == ' ' || \
-		map->data[y + 1][x] == ' ' || map->data[y + 1][x + 1] == ' ')
+	else if (data->map[y - 1][x - 1] == ' ' || data->map[y - 1][x] == ' ' || \
+		data->map[y - 1][x + 1] == ' ' || data->map[y][x - 1] == ' ' || \
+		data->map[y][x + 1] == ' ' || data->map[y + 1][x - 1] == ' ' || \
+		data->map[y + 1][x] == ' ' || data->map[y + 1][x + 1] == ' ')
 		msg_exit("Error\nMap is not enclosed by walls.\n", 1);
 }
 

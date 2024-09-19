@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:45:31 by dhasan            #+#    #+#             */
-/*   Updated: 2024/09/18 19:52:23 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/09/19 16:27:51 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,10 @@ char	*skip_info(int fd)
 
 void	save_position(t_data *data, unsigned int x, unsigned int y)
 {
-	if (data->player.x != -1 || data->player.y != -1)
+	if (data->pos_x != -1 || data->pos_y != -1)
 		msg_exit("Error\nMultiple player positions.\n", 1);
-	data->player.x = x;
-	data->player.y = y;
+	data->pos_x = x;
+	data->pos_y = y;
 }
 // void	copy_map(t_data *data)
 // {
