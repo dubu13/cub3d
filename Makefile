@@ -3,10 +3,10 @@ NAME     = cub3d
 
 # Compiler and flags
 CC       = cc
-CFLAGS   = -Wall -Werror -Wextra -g
+CFLAGS   = -Wall -Werror -Wextra -g -I.
 
 # MLX42 Flags
-MLXFLAGS = -lXext -lX11 -lm -lbsd -lglfw -lpthread
+MLXFLAGS = -lm -lglfw -lpthread
 
 LIBFT = ./libft/libft.a
 
@@ -14,9 +14,9 @@ LIBFT = ./libft/libft.a
 BINDIR = bin
 
 # Source files
-SRCS     = $(wildcard *.c)
+SRCS     = $(wildcard *.c parser/*.c)
 
-# Object files
+# Object files (automatically place objects in the same subdirectory structure under BINDIR)
 OBJS     = $(SRCS:%.c=$(BINDIR)/%.o)
 
 # MLX42 library
@@ -25,13 +25,13 @@ MLX      = ./MLX42/build/libmlx42.a
 # Default target
 all: $(NAME)
 
-$(NAME): $(HEADER) $(MLX) $(OBJS)
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(MLX) $(MLXFLAGS) $(HEADER)
+$(NAME): $(LIBFT) $(MLX) $(OBJS)
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(MLX) $(MLXFLAGS)
 	@echo $(GREEN)"Building $(NAME)"$(DEFAULT);
 
-# Create bin directory if it doesn't exist
+# Create bin directories if they don't exist
 $(BINDIR):
-	@mkdir -p $(BINDIR)
+	@mkdir -p $(BINDIR) $(BINDIR)/parser
 
 # MLX42 library
 $(MLX):
@@ -42,10 +42,11 @@ $(MLX):
 
 # Compile .c files into .o files
 $(BINDIR)/%.o: %.c | $(BINDIR)
+	@mkdir -p $(dir $@)  # Ensure any needed subdirectories are created
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 # Linking libft
-$(HEADER):
+$(LIBFT):
 	@make -C libft
 
 submodule:
@@ -62,7 +63,7 @@ fclean: clean
 	@rm -f $(NAME)
 	@rm -rf MLX42
 	@make -C libft fclean
-	@echo $(RED)"Removing $(NAME) and MLX42 "$(DEFAULT);
+	@echo $(RED)"Removing $(NAME) and MLX42"$(DEFAULT);
 
 # Rebuild everything
 re: fclean all
@@ -74,3 +75,4 @@ re: fclean all
 DEFAULT = "\033[39m"
 GREEN   = "\033[32m"
 RED     = "\033[31m"
+

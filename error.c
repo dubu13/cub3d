@@ -12,8 +12,8 @@
 
 #include "cub3d.h"
 
-int error(char *msg)
+int	error(char *msg)
 {
-    printf("%s\n", msg);
-    return (1);
+	printf("%s\n", msg);
+	return (1);
 }

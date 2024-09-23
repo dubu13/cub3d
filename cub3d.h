@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 11:58:20 by dkremer           #+#    #+#             */
-/*   Updated: 2024/09/19 16:26:53 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/09/23 16:18:02 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,6 @@ bool	is_texture(char *contect);
 bool	is_color(char *contect);
 char	*skip_info(int fd);
 void	save_position(t_data *data, unsigned int x, unsigned int y);
+void	read_file(char *file, t_data *data);
+
 #endif
