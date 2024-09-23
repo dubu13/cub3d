@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkremer <dkremer@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 14:07:48 by dkremer           #+#    #+#             */
-/*   Updated: 2024/09/23 16:19:32 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/09/23 17:49:17 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 int	is_wall(t_cub *cub, float x, float y)
 {
-	int		map_x;
-	int		map_y;
-	size_t	row_length;
+	unsigned int	map_x;
+	unsigned int	map_y;
+	size_t			row_length;
 
 	if (x < 0 || y < 0)
 		return (1);
@@ -26,7 +26,7 @@ int	is_wall(t_cub *cub, float x, float y)
 		map_y >= cub->data->height)
 		return (1);
 	row_length = ft_strlen(cub->data->map[map_y]);
-	if (map_x >= (int)row_length)
+	if (map_x >= (unsigned int)row_length)
 		return (1);
 	if (cub->data->map[map_y][map_x] == '1')
 		return (1);

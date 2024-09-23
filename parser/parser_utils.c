@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:45:31 by dhasan            #+#    #+#             */
-/*   Updated: 2024/09/19 16:27:51 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/09/23 17:50:16 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ char	*skip_info(int fd)
 	char	*line;
 
 	line = get_next_line(fd);
-	while (line && (is_texture(line) || *line == "F" || *line == "C"))
+	while (line && (is_texture(line) || *line == 'F' || *line == 'C'))
 	{
 		free(line);
 		line = get_next_line(fd);

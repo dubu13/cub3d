@@ -27,17 +27,17 @@ typedef struct s_ray
 
 typedef struct s_data
 {
-	char	**map;
-	char	*no_texture;
-	char	*so_texture;
-	char	*we_texture;
-	char	*ea_texture;
-	int		floor_color[3];
-	int		ceiling_color[3];
-	int		width;
-	int		height;
-	int		pos_x;
-	int		pos_y;
+	char			**map;
+	char			*no_texture;
+	char			*so_texture;
+	char			*we_texture;
+	char			*ea_texture;
+	int				floor_color[3];
+	int				ceiling_color[3];
+	unsigned int	width;
+	unsigned int	height;
+	int				pos_x;
+	int				pos_y;
 }	t_data;
 
 typedef struct s_cub

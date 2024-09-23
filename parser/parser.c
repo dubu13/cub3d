@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:43:35 by dhasan            #+#    #+#             */
-/*   Updated: 2024/09/19 15:48:27 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/09/23 21:20:04 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,26 @@
 
 void	parse_texture(char *contect, t_data *data)
 {
-	if (!check_texture(contect))
-		msg_exit("Error\nInvalid texture.\n", 1);
-	if (!ft_strncmp(contect, "NO ", 3))
-		data->no_texture = ft_strdup(contect + 3);
-	else if (!ft_strncmp(contect, "SO ", 3))
-		data->so_texture = ft_strdup(contect + 3);
-	else if (!ft_strncmp(contect, "WE ", 3))
-		data->we_texture = ft_strdup(contect + 3);
-	else if (!ft_strncmp(contect, "EA ", 3))
-		data->ea_texture = ft_strdup(contect + 3);
+	char	**texture;
+	char	*path;
+
+	texture = ft_split(contect, ' ');
+	if (texture[1])
+	{
+		path = ft_strtrim(texture[1], " \t\n\r\v\f");
+		if (texture[2] || !check_texture(path))
+			msg_exit("Error\nInvalid texture.", 1);
+		if (!ft_strncmp(texture[0], "NO ", 3))
+			data->no_texture = ft_strdup(path);
+		else if (!ft_strncmp(texture[0], "SO ", 3))
+			data->so_texture = ft_strdup(path);
+		else if (!ft_strncmp(texture[0], "WE ", 3))
+			data->we_texture = ft_strdup(path);
+		else if (!ft_strncmp(texture[0], "EA ", 3))
+			data->ea_texture = ft_strdup(path);
+		free(path);
+	}
+	free(texture);
 }
 
 void	parse_color(char *contect, int *color)
@@ -40,19 +50,19 @@ void	parse_color(char *contect, int *color)
 
 void	save_map_size(int fd, t_data *data)
 {
-	char	*line;
-	int		i;
+	char			*line;
+	unsigned int	i;
 
 	i = 0;
 	line = skip_info(fd);
 	while (line)
 	{
 		if (line[0] == '\0' || line[0] == '\n')
-			exit_error("Error\nInvalid map.\n", 1);
+			msg_exit("Error\nInvalid map.\n", 1);
 		while (line[i])
 		{
 			if (!ft_strchr(" 01NSEW", line[i]))
-				exit_error("Error\nMap with invalid char.\n", 1);
+				msg_exit("Error\nMap with invalid char.\n", 1);
 			if (ft_strchr("NSEW", line[i]))
 				save_position(data, i, data->height);
 			i++;
@@ -68,11 +78,12 @@ void	save_map_size(int fd, t_data *data)
 
 void	parse_map(int fd, t_data *data)
 {
-	char	*line;
-	int		y;
+	char			*line;
+	unsigned int	y;
 
 	data->pos_x = -1;
 	data->pos_y = -1;
+	y = 0;
 	save_map_size(fd, data);
 	data->map = ft_calloc(data->height, sizeof(char *));
 	line = skip_info(fd);
@@ -98,9 +109,9 @@ void	read_file(char *file, t_data *data)
 	{
 		if (is_texture(contect))
 			parse_texture(contect, data);
-		else if (*contect == "F")
+		else if (*contect == 'F')
 			parse_color(contect + 2, data->floor_color);
-		else if (*contect == "C")
+		else if (*contect == 'C')
 			parse_color(contect + 2, data->ceiling_color);
 		else
 		{
