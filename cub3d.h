@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 11:58:20 by dkremer           #+#    #+#             */
-/*   Updated: 2024/09/23 16:18:02 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/09/26 20:17:09 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,22 @@ void	set_steps(float angle, float *x_step, float *y_step, char axis);
 void	set_position(t_cub *cub, float angle, float *x, float *y, char axis);
 void	set_step_direction(float angle, float *x_step, float *y_step, char axis);
 
-//
+//paser.c
+void	check_extension(char *file);
+void	parser(char *file, t_data *data);
+//msg
 void	msg_exit(char *msg, int exit_code);
 //checker.c
 void	is_map_enclosed(t_data *data);
 bool	check_color(char **rgb);
 bool	check_texture(char *contect);
-void	check_extension(char *file);
 //parser_utils.c
 char	*skip_nl(int fd);
 bool	is_texture(char *contect);
 bool	is_color(char *contect);
 char	*skip_info(int fd);
-void	save_position(t_data *data, unsigned int x, unsigned int y);
-void	read_file(char *file, t_data *data);
+//map_utils.c
+void	char_check(t_data *data);
+void	file_to_map(int fd, t_data *data, char *line);
 
 #endif

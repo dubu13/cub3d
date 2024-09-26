@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:53:31 by dhasan            #+#    #+#             */
-/*   Updated: 2024/09/23 17:55:39 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/09/26 20:16:04 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,6 @@ void	msg_exit(char *msg, int exit_code)
 {
 	printf("%s\n", msg);
 	exit(exit_code);
-}
-
-void	parser(char *file, t_data *data)
-{
-	check_extension(file);
-	read_file(file, data);
-	is_map_enclosed(data);
 }
 
 void	init_player(t_cub cub)
@@ -77,7 +70,6 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	parser(argv[1], data);
-	print_data(data);
 	if (init_game(data))
 		msg_exit("Error\nInitialization failed.\n", 1);
 }

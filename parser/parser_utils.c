@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:45:31 by dhasan            #+#    #+#             */
-/*   Updated: 2024/09/23 17:50:16 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/09/26 20:14:01 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ char	*skip_info(int fd)
 	char	*line;
 
 	line = get_next_line(fd);
+	if (!line)
+		msg_exit("Error\nMissing information.\n", 1);
 	while (line && (is_texture(line) || *line == 'F' || *line == 'C'))
 	{
 		free(line);
@@ -59,29 +61,3 @@ char	*skip_info(int fd)
 	}
 	return (line);
 }
-
-void	save_position(t_data *data, unsigned int x, unsigned int y)
-{
-	if (data->pos_x != -1 || data->pos_y != -1)
-		msg_exit("Error\nMultiple player positions.\n", 1);
-	data->pos_x = x;
-	data->pos_y = y;
-}
-// void	copy_map(t_data *data)
-// {
-// 	char	**cpy_map;
-// 	int		i;
-
-// 	i = 0;
-// 	cpy_map = ft_calloc(data->height + 1, sizeof(char *));
-// 	if (!cpy_map)
-// 		msg_exit("Error\nMemory allocation failed.\n", 1);
-// 	while (data->map[i])
-// 	{
-// 		cpy_map[i] = ft_strdup(data->map[i]);
-// 		if (!cpy_map[i])
-// 			msg_exit("Error\nMemory allocation failed.\n", 1);
-// 		i++;
-// 	}
-// 	return (cpy_map);
-// }

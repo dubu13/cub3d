@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:55:47 by dhasan            #+#    #+#             */
-/*   Updated: 2024/09/23 21:08:45 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/09/26 20:11:52 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	check_extension(char *file)
 
 	extension = ft_strrchr(file, '.');
 	if (extension == NULL || ft_strncmp(extension, ".cub\0", 5) != 0)
-		msg_exit("Error\nMap should be in '.cub' format.\n", 1);
+		msg_exit("Error\nMap should be in '.cub' format.", 1);
 }
 
 bool	check_texture(char *contect)
@@ -46,15 +46,17 @@ bool	check_color(char **rgb)
 	return (true);
 }
 
-void	check_around_position(t_data *data, unsigned int x, unsigned int y)
+int	check_around_position(t_data *data, unsigned int x, unsigned int y)
 {
 	if (x == 0 || x == data->width - 1 || y == 0 || y == data->height - 1)
-		msg_exit("Error\nMap is not enclosed by walls.\n", 1);
-	else if (data->map[y - 1][x - 1] == ' ' || data->map[y - 1][x] == ' ' || \
-		data->map[y - 1][x + 1] == ' ' || data->map[y][x - 1] == ' ' || \
-		data->map[y][x + 1] == ' ' || data->map[y + 1][x - 1] == ' ' || \
-		data->map[y + 1][x] == ' ' || data->map[y + 1][x + 1] == ' ')
-		msg_exit("Error\nMap is not enclosed by walls.\n", 1);
+		return (0);
+	else if (data->map[y - 1][x] == ' ' || data->map[y][x - 1] == ' ' || \
+		data->map[y][x + 1] == ' ' || data->map[y + 1][x] == ' ')
+		return (0);
+	else if (data->map[y - 1][x] == '\0' || data->map[y][x - 1] == '\0' || \
+		data->map[y][x + 1] == '\0' || data->map[y + 1][x] == '\0')
+		return (0);
+	return (1);
 }
 
 void	is_map_enclosed(t_data *data)
@@ -66,10 +68,11 @@ void	is_map_enclosed(t_data *data)
 	while (y < data->height)
 	{
 		x = 0;
-		while (x < data->width)
+		while (data->map[y][x] != '\0')
 		{
-			if (data->map[y][x] != '1')
-				check_around_position(data, x, y);
+			if (data->map[y][x] != '1' && data->map[y][x] != ' ')
+				if (!check_around_position(data, x, y))
+					msg_exit("Error\nMap is not enclosed by walls.", 1);
 			x++;
 		}
 		y++;

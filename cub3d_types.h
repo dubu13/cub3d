@@ -28,6 +28,7 @@ typedef struct s_ray
 typedef struct s_data
 {
 	char			**map;
+	char			*map_temp;
 	char			*no_texture;
 	char			*so_texture;
 	char			*we_texture;
