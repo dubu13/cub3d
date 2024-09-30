@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 14:07:48 by dkremer           #+#    #+#             */
-/*   Updated: 2024/09/23 17:49:17 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/09/30 15:59:43 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	is_wall(t_cub *cub, float x, float y)
 	row_length = ft_strlen(cub->data->map[map_y]);
 	if (map_x >= (unsigned int)row_length)
 		return (1);
+	printf("Checking wall at map_x: %u, map_y: %u, value: %c\n", map_x, map_y, cub->data->map[map_y][map_x]);
 	if (cub->data->map[map_y][map_x] == '1')
 		return (1);
 	return (0);
@@ -61,6 +62,8 @@ float	intersection(t_cub *cub, float angle, char axis)
 			y += y_step;
 		}
 	}
+	printf("Intersection found at x: %f, y: %f, distance: %f\n", x, y, \
+				sqrt(pow(x - cub->player->p_x, 2) + pow(y - cub->player->p_y, 2)));
 	return (sqrt(pow(x - cub->player->p_x, 2) + pow(y - cub->player->p_y, 2)));
 }
 
@@ -83,7 +86,8 @@ void	raycasting(t_cub *cub)
 			cub->ray->distance = h_intercept;
 			cub->ray->wall_hit = 1;
 		}
-		// render_wall(cub, ray);
+		printf("Ray %d: angle: %f, distance: %f\n", ray, cub->ray->angle, cub->ray->distance);
+		render_wall(cub, ray);
 		ray++;
 		cub->ray->angle += cub->player->fov / SCREEN_WIDTH;
 	}

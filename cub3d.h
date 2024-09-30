@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 11:58:20 by dkremer           #+#    #+#             */
-/*   Updated: 2024/09/26 20:17:09 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/09/30 15:45:47 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 
 int		error(char *msg);
 t_data	*init_data();
+
+//raycasting
 int		is_direction_positive(float angle, char axis);
 int		get_step_direction(float angle, float *increment, float *step, char axis);
 void	set_steps(float angle, float *x_step, float *y_step, char axis);
@@ -49,5 +51,9 @@ char	*skip_info(int fd);
 //map_utils.c
 void	char_check(t_data *data);
 void	file_to_map(int fd, t_data *data, char *line);
+
+//rendering
+
+void	render_wall(t_cub *mlx, int ray);
 
 #endif
