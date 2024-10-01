@@ -6,11 +6,12 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:53:31 by dhasan            #+#    #+#             */
-/*   Updated: 2024/09/26 20:16:04 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/01 15:14:29 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+#include "cub3d_types.h"
 
 void	msg_exit(char *msg, int exit_code)
 {
@@ -18,27 +19,45 @@ void	msg_exit(char *msg, int exit_code)
 	exit(exit_code);
 }
 
-void	init_player(t_cub cub)
+void	init_player(t_cub *cub)
 {
-	cub.player->p_x = cub.data->pos_x * TILE_SIZE + TILE_SIZE / 2;
-	cub.player->p_y = cub.data->pos_y * TILE_SIZE + TILE_SIZE / 2;
-	cub.player->fov = FOV_RAD;
-	cub.player->angle = M_PI;
+	cub->player->p_x = cub->data->pos_x * TILE_SIZE + TILE_SIZE / 2;
+	cub->player->p_y = cub->data->pos_y * TILE_SIZE + TILE_SIZE / 2;
+	cub->player->fov = FOV_RAD;
+	cub->player->angle = M_PI;
+}
+
+void	game_loop(void *ml)
+{
+	t_cub	*mlx;
+
+	mlx = ml;
+	mlx_delete_image(mlx->mlx, mlx->img);
+	mlx->img = mlx_new_image(mlx->mlx, SCREEN_WIDTH, SCREEN_HEIGHT);	// create new image
+	hook(mlx, 0, 0);
+	raycasting(mlx);
+	mlx_image_to_window(mlx->mlx, mlx->img, 0, 0);
 }
 
 int	init_game(t_data *data)
 {
-	t_cub	cub;
+	t_cub	*cub;
 
-	cub.data = data;
-	if (!(cub.player = ft_calloc(1, sizeof(t_player))))
+	cub = ft_calloc(1, sizeof(t_cub));
+	if (!cub)
 		return (1);
-	if (!(cub.ray = ft_calloc(1, sizeof(t_ray))))
+	cub->data = data;
+	if (!(cub->player = ft_calloc(1, sizeof(t_player))))
 		return (1);
-	if (!(cub.mlx = mlx_init(SCREEN_WIDTH, SCREEN_HEIGHT, "cub3d", true)))
+	if (!(cub->ray = ft_calloc(1, sizeof(t_ray))))
+		return (1);
+	mlx_set_setting(MLX_STRETCH_IMAGE, true);
+	if (!(cub->mlx = mlx_init(SCREEN_WIDTH, SCREEN_HEIGHT, "cub3d", true)))
 		return (1);
 	init_player(cub);
-	mlx_loop(cub.mlx);
+	mlx_loop_hook(cub->mlx, &game_loop, cub);
+	mlx_key_hook(cub->mlx, &mlx_key, cub);
+	mlx_loop(cub->mlx);
 	return (0);
 }
 

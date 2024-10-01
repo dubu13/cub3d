@@ -6,89 +6,95 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 14:07:48 by dkremer           #+#    #+#             */
-/*   Updated: 2024/09/30 15:59:43 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/10/01 15:28:37 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	is_wall(t_cub *cub, float x, float y)
+int	wall_hit(float x, float y, t_cub *game)
 {
-	unsigned int	map_x;
-	unsigned int	map_y;
-	size_t			row_length;
+	unsigned int	x_m;
+	unsigned int	y_m;
 
 	if (x < 0 || y < 0)
-		return (1);
-	map_x = (int)(floor(x / TILE_SIZE));
-	map_y = (int)(floor(y / TILE_SIZE));
-	if (map_x < 0 || map_y < 0 || map_x >= cub->data->width || \
-		map_y >= cub->data->height)
-		return (1);
-	row_length = ft_strlen(cub->data->map[map_y]);
-	if (map_x >= (unsigned int)row_length)
-		return (1);
-	printf("Checking wall at map_x: %u, map_y: %u, value: %c\n", map_x, map_y, cub->data->map[map_y][map_x]);
-	if (cub->data->map[map_y][map_x] == '1')
-		return (1);
-	return (0);
+		return (0);
+	x_m = floor(x / TILE_SIZE);
+	y_m = floor(y / TILE_SIZE);
+	if ((y_m >= game->data->height || x_m >= game->data->width))
+		return (0);
+	if (game->data->map[y_m] && x_m <= strlen(game->data->map[y_m]))
+		if (game->data->map[y_m][x_m] == '1')
+			return (0);
+	return (1);
 }
 
-float	intersection(t_cub *cub, float angle, char axis)
+float	get_h_inter(t_cub *game, float angle)
 {
+	float	h_x;
+	float	h_y;
 	float	x_step;
 	float	y_step;
-	float	x;
-	float	y;
-	float	intercept;
+	int		pixel;
 
-	set_steps(angle, &x_step, &y_step, axis);
-	set_position(cub, angle, &x, &y, axis);
-	intercept = get_step_direction(angle, &x_step, &y_step, axis);
-	set_step_direction(angle, &x_step, &y_step, axis);
-	if (axis == 'x')
+	set_steps(angle, &x_step, &y_step, 'x');
+	h_y = floor(game->player->p_y / TILE_SIZE) * TILE_SIZE;
+	pixel = inter_check(angle, &h_y, &y_step, 1);
+	h_x = game->player->p_x + (h_y - game->player->p_y) / tan(angle);
+	set_step_direction(angle, &x_step, &y_step, 'x');
+	while (wall_hit(h_x, h_y - pixel, game))
 	{
-		while (!is_wall(cub, x, y - intercept))
-		{
-			x += x_step;
-			y += y_step;
-		}
+		h_x += x_step;
+		h_y += y_step;
 	}
-	else
-	{
-		while (!is_wall(cub, x - intercept, y))
-		{
-			x += x_step;
-			y += y_step;
-		}
-	}
-	printf("Intersection found at x: %f, y: %f, distance: %f\n", x, y, \
-				sqrt(pow(x - cub->player->p_x, 2) + pow(y - cub->player->p_y, 2)));
-	return (sqrt(pow(x - cub->player->p_x, 2) + pow(y - cub->player->p_y, 2)));
+	return (sqrt(pow(h_x - game->player->p_x, 2) + pow(h_y - game->player->p_y,
+				2)));
 }
 
-void	raycasting(t_cub *cub)
+float	get_v_inter(t_cub *game, float angle)
 {
-	double	h_intercept;
-	double	v_intercept;
+	float	v_x;
+	float	v_y;
+	float	x_step;
+	float	y_step;
+	int		pixel;
+
+	set_steps(angle, &x_step, &y_step, 'y');
+	v_x = floor(game->player->p_x / TILE_SIZE) * TILE_SIZE;
+	pixel = inter_check(angle, &v_x, &x_step, 0);
+	v_y = game->player->p_y + (v_x - game->player->p_x) * tan(angle);
+	set_step_direction(angle, &x_step, &y_step, 'y');
+	while (wall_hit(v_x - pixel, v_y, game))
+	{
+		v_x += x_step;
+		v_y += y_step;
+	}
+	return (sqrt(pow(v_x - game->player->p_x, 2) + pow(v_y - game->player->p_y,
+				2)));
+}
+
+void	raycasting(t_cub *mlx)
+{
+	double	h_inter;
+	double	v_inter;
 	int		ray;
 
 	ray = 0;
-	cub->ray->angle = cub->player->angle - cub->player->fov / 2;
+	mlx->ray->angle = mlx->player->angle - (mlx->player->fov / 2);
 	while (ray < SCREEN_WIDTH)
 	{
-		h_intercept = intersection(cub, cub->ray->angle, 'x');
-		v_intercept = intersection(cub, cub->ray->angle, 'y');
-		if (v_intercept <= h_intercept)
-			cub->ray->distance = v_intercept;
+		mlx->ray->wall_hit = 0;
+		h_inter = get_h_inter(mlx, nor_angle(mlx->ray->angle));
+		v_inter = get_v_inter(mlx, nor_angle(mlx->ray->angle));
+		if (v_inter <= h_inter)
+			mlx->ray->distance = v_inter;
 		else
 		{
-			cub->ray->distance = h_intercept;
-			cub->ray->wall_hit = 1;
+			mlx->ray->distance = h_inter;
+			mlx->ray->wall_hit = 1;
 		}
-		printf("Ray %d: angle: %f, distance: %f\n", ray, cub->ray->angle, cub->ray->distance);
-		render_wall(cub, ray);
+		render_wall(mlx, ray);
 		ray++;
-		cub->ray->angle += cub->player->fov / SCREEN_WIDTH;
+		mlx->ray->angle += (mlx->player->fov / SCREEN_WIDTH);
 	}
 }

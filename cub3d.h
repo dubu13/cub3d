@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 11:58:20 by dkremer           #+#    #+#             */
-/*   Updated: 2024/09/30 15:45:47 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/10/01 13:47:52 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,13 @@ t_data	*init_data();
 
 //raycasting
 int		is_direction_positive(float angle, char axis);
-int		get_step_direction(float angle, float *increment, float *step, char axis);
+int		get_step_direction(float angle, float *increment, char axis);
 void	set_steps(float angle, float *x_step, float *y_step, char axis);
-void	set_position(t_cub *cub, float angle, float *x, float *y, char axis);
+void	set_position(t_cub *cub, float angle, float pos[2], char axis);
 void	set_step_direction(float angle, float *x_step, float *y_step, char axis);
-
+void	raycasting(t_cub *cub);
+int		inter_check(float angle, float *inter, float *step, int is_horizon);
+int		dir_check(float angle, char c);
 //paser.c
 void	check_extension(char *file);
 void	parser(char *file, t_data *data);
@@ -54,6 +56,10 @@ void	file_to_map(int fd, t_data *data, char *line);
 
 //rendering
 
+float	nor_angle(float angle);
 void	render_wall(t_cub *mlx, int ray);
 
+//movement
+void	hook(t_cub *game, double move_x, double move_y);
+void	mlx_key(mlx_key_data_t keydata, void *ml);
 #endif
