@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 11:58:20 by dkremer           #+#    #+#             */
-/*   Updated: 2024/10/04 16:09:18 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/05 17:54:34 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ char	*skip_nl(int fd);
 bool	is_texture(char *contect);
 bool	is_color(char *contect);
 char	*skip_info(int fd);
+int32_t	convert_rgb(int r, int g, int b, int a);
 //map_utils.c
 void	char_check(t_data *data);
 void	file_to_map(int fd, t_data *data, char *line);

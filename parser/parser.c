@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:43:35 by dhasan            #+#    #+#             */
-/*   Updated: 2024/10/02 16:18:14 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/05 17:53:53 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,23 +36,28 @@ void	parse_texture(char *contect, t_data *data)
 	free(texture);
 }
 
-void	parse_color(char *contect, int *color)
+void	parse_color(char *contect, t_data *data, char type)
 {
-	char	**rgb;
+	char	**colors;
+	int		rgb[3];
 
-	rgb = ft_split(contect, ',');
-	if (!check_color(rgb))
+	colors = ft_split(contect, ',');
+	if (!check_color(colors))
 		msg_exit("Error\nInvalid color.", 1);
-	color[0] = ft_atoi(rgb[0]);
-	color[1] = ft_atoi(rgb[1]);
-	color[2] = ft_atoi(rgb[2]);
+	rgb[0] = ft_atoi(colors[0]);
+	rgb[1] = ft_atoi(colors[1]);
+	rgb[2] = ft_atoi(colors[2]);
+	if (type == 'f')
+		data->floor_c = convert_rgb(rgb[0], rgb[1], rgb[2], 255);
+	else
+		data->ceiling_c = convert_rgb(rgb[0], rgb[1], rgb[2], 255);
+	free(colors);
 }
 
 void	parse_map(int fd, t_data *data, char *line)
 {
 	data->pos_x = -1;
 	data->pos_y = -1;
-
 	file_to_map(fd, data, line);
 	char_check(data);
 	is_map_enclosed(data);
@@ -72,9 +77,9 @@ void	read_file(char *file, t_data *data)
 		if (is_texture(contect))
 			parse_texture(contect, data);
 		else if (*contect == 'F')
-			parse_color(contect + 2, data->floor_color);
+			parse_color(contect + 2, data, 'f');
 		else if (*contect == 'C')
-			parse_color(contect + 2, data->ceiling_color);
+			parse_color(contect + 2, data, 'c');
 		else
 		{
 			parse_map(fd, data, contect);

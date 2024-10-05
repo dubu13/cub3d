@@ -6,11 +6,16 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:45:31 by dhasan            #+#    #+#             */
-/*   Updated: 2024/09/26 20:14:01 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/05 17:53:47 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+int32_t	convert_rgb(int r, int g, int b, int a)
+{
+	return ((r << 24) | (g << 16) | (b << 8) | a);
+}
 
 char	*skip_nl(int fd)
 {

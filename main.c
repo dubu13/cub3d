@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:53:31 by dhasan            #+#    #+#             */
-/*   Updated: 2024/10/04 16:12:28 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/05 17:50:35 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,19 +61,19 @@ int	init_game(t_data *data)
 	return (0);
 }
 
-void	print_data(t_data *data)
-{
-	printf("NO: %s\n", data->no_texture);
-	printf("SO: %s\n", data->so_texture);
-	printf("WE: %s\n", data->we_texture);
-	printf("EA: %s\n", data->ea_texture);
-	printf("F: %d, %d, %d\n", data->floor_color[0], data->floor_color[1], data->floor_color[2]);
-	printf("C: %d, %d, %d\n", data->ceiling_color[0], data->ceiling_color[1], data->ceiling_color[2]);
-	printf("Map:\n");
-	for (unsigned int i = 0; i < data->height; i++)
-		printf("%s\n", data->map[i]);
-	printf("Player position: %d, %d\n", data->pos_x, data->pos_y);
-}
+// void	print_data(t_data *data)
+// {
+// 	printf("NO: %s\n", data->no_texture);
+// 	printf("SO: %s\n", data->so_texture);
+// 	printf("WE: %s\n", data->we_texture);
+// 	printf("EA: %s\n", data->ea_texture);
+// 	printf("F: %d, %d, %d\n", data->floor_color[0], data->floor_color[1], data->floor_color[2]);
+// 	printf("C: %d, %d, %d\n", data->ceiling_color[0], data->ceiling_color[1], data->ceiling_color[2]);
+// 	printf("Map:\n");
+// 	for (unsigned int i = 0; i < data->height; i++)
+// 		printf("%s\n", data->map[i]);
+// 	printf("Player position: %d, %d\n", data->pos_x, data->pos_y);
+// }
 
 int	main(int argc, char **argv)
 {
@@ -88,6 +88,8 @@ int	main(int argc, char **argv)
 		printf("Usage: %s <map_file.cub>\n", argv[0]);
 		return (1);
 	}
+	// data->pos_x = -1;
+	// data->pos_y = -1;
 	parser(argv[1], data);
 	// print_data(data);
 	if (init_game(data))

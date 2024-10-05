@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:53:50 by dkremer           #+#    #+#             */
-/*   Updated: 2024/10/02 18:58:25 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/05 17:52:52 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ typedef struct s_data
 	char			*so_texture;
 	char			*we_texture;
 	char			*ea_texture;
-	int				floor_color[3];
-	int				ceiling_color[3];
+	int32_t			floor_c;
+	int32_t			ceiling_c;
 	unsigned int	width;
 	unsigned int	height;
 	int				pos_x;
