@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:22:36 by dkremer           #+#    #+#             */
-/*   Updated: 2024/10/05 19:26:25 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/05 22:45:15 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ void	draw_wall_segment(t_cub *game, int ray, t_wall *wall)
 	step = (double)wall->texture->height / (double)(wall->b_pix - wall->t_pix);
 	texture_pos = 0;
 	y_start = wall->t_pix;
-
 	while (y_start < wall->b_pix)
 	{
 		tex_y = (int)texture_pos & (wall->texture->height - 1);
@@ -58,7 +57,6 @@ void	draw_wall(t_cub *game, int ray, int t_pix, int b_pix)
 	t_wall	*wall_data;
 
 	wall_data = ft_calloc(1, sizeof(t_wall));
-
 	if (!wall_data)
 		msg_exit("Error: Failed to allocate memory for wall data", 1);
 	wall_data->texture = get_textures(game, game->ray->wall_hit);
