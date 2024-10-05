@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:47:14 by dhasan            #+#    #+#             */
-/*   Updated: 2024/10/04 17:34:23 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/05 22:25:59 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,28 +37,13 @@ mlx_texture_t	*get_textures(t_cub *game, int wall_hit)
 //fix this
 double	get_texture_x(t_cub *game, mlx_texture_t *texture)
 {
-	double	wall_x;
+	float	wall_x;
 
-	// if (game->ray->wall_hit == 0)
-	// 	wall_x = game->player->p_y + game->ray->distance * \
-	// 		sin(game->ray->angle);
-	// else
-	// 	wall_x = game->player->p_x + game->ray->distance * \
-	// 		cos(game->ray->angle);
-	if (game->ray->wall_hit == 0) // Horizontal wall hit
-	{
-		wall_x = game->player->p_y + game->ray->distance * sin(game->ray->angle);
-		if (!is_direction_positive(game->ray->angle, 'y')) // Adjusting for ray direction
-			wall_x = -wall_x;
-	}
-	else // Vertical wall hit
-	{
-		wall_x = game->player->p_x + game->ray->distance * cos(game->ray->angle);
-		if (!is_direction_positive(game->ray->angle, 'x')) // Adjusting for ray direction
-			wall_x = -wall_x;
-	}
-	wall_x -= floor(wall_x);
-	return (wall_x * texture->width);
+	if (game->ray->wall_hit == 0)
+		wall_x = fmodf(game->ray->hit_y, TILE_SIZE);
+	else
+		wall_x = fmodf(game->ray->hit_x, TILE_SIZE);
+	return (wall_x / TILE_SIZE * texture->width);
 }
 
 uint32_t	get_texture_color(mlx_texture_t *texture, int tex_x, int tex_y)

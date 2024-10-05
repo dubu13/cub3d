@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:53:50 by dkremer           #+#    #+#             */
-/*   Updated: 2024/10/05 17:52:52 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/05 22:05:34 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ typedef struct s_ray
 	double	angle;
 	double	distance;
 	int		wall_hit;
+	double	hit_x;
+	double	hit_y;
 }	t_ray;
 
 typedef struct s_data

@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 14:07:48 by dkremer           #+#    #+#             */
-/*   Updated: 2024/10/01 15:28:37 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/10/05 22:15:34 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	wall_hit(float x, float y, t_cub *game)
 	return (1);
 }
 
-float	get_h_inter(t_cub *game, float angle)
+float	get_h_inter(t_cub *game, float angle, float *hit_x, float *hit_y)
 {
 	float	h_x;
 	float	h_y;
@@ -47,11 +47,13 @@ float	get_h_inter(t_cub *game, float angle)
 		h_x += x_step;
 		h_y += y_step;
 	}
+	*hit_x = h_x;
+	*hit_y = h_y;
 	return (sqrt(pow(h_x - game->player->p_x, 2) + pow(h_y - game->player->p_y,
 				2)));
 }
 
-float	get_v_inter(t_cub *game, float angle)
+float	get_v_inter(t_cub *game, float angle, float *hit_x, float *hit_y)
 {
 	float	v_x;
 	float	v_y;
@@ -69,6 +71,8 @@ float	get_v_inter(t_cub *game, float angle)
 		v_x += x_step;
 		v_y += y_step;
 	}
+	*hit_x = v_x;
+	*hit_y = v_y;
 	return (sqrt(pow(v_x - game->player->p_x, 2) + pow(v_y - game->player->p_y,
 				2)));
 }
@@ -78,19 +82,27 @@ void	raycasting(t_cub *mlx)
 	double	h_inter;
 	double	v_inter;
 	int		ray;
+	float	hit_x;
+	float	hit_y;
 
 	ray = 0;
 	mlx->ray->angle = mlx->player->angle - (mlx->player->fov / 2);
 	while (ray < SCREEN_WIDTH)
 	{
 		mlx->ray->wall_hit = 0;
-		h_inter = get_h_inter(mlx, nor_angle(mlx->ray->angle));
-		v_inter = get_v_inter(mlx, nor_angle(mlx->ray->angle));
+		h_inter = get_h_inter(mlx, nor_angle(mlx->ray->angle), &hit_x, &hit_y);
+		v_inter = get_v_inter(mlx, nor_angle(mlx->ray->angle), &hit_x, &hit_y);
 		if (v_inter <= h_inter)
+		{
 			mlx->ray->distance = v_inter;
+			mlx->ray->hit_x = hit_x;
+			mlx->ray->hit_y = hit_y;
+		}
 		else
 		{
 			mlx->ray->distance = h_inter;
+			mlx->ray->hit_x = hit_x;
+			mlx->ray->hit_y = hit_y;
 			mlx->ray->wall_hit = 1;
 		}
 		render_wall(mlx, ray);
