@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:22:36 by dkremer           #+#    #+#             */
-/*   Updated: 2024/10/05 17:35:40 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/05 19:26:25 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,8 @@ void	my_mlx_pixel_put(t_cub *game, int x, int y, int color)
 
 void	draw_floor_ceiling(t_cub *game, int ray, int t_pix, int b_pix)
 {
-	// t_data	*data;
-	int		i;
-	// int		f;
-	// int		c;
+	int	i;
 
-	// data = game->data;
-	// f = data->floor_c[0] << 16 | data->floor_c[1] << 8 | data->floor_c[2] << ;
-	// c = data->ceiling_c[0] << 16 | data->ceiling_c[1] << 8 | data->ceiling_c[2];
 	i = b_pix;
 	while (i < SCREEN_HEIGHT)
 		my_mlx_pixel_put(game, ray, i++, game->data->floor_c);
