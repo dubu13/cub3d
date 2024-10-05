@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d_types.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkremer <dkremer@student.42heilbronn.de>   +#+  +:+       +#+        */
+/*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/30 15:53:50 by dkremer           #+#    #+#             */
-/*   Updated: 2024/10/01 13:37:27 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/10/02 18:58:25 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,19 @@
 # define SCREEN_HEIGHT 800
 # define TILE_SIZE 64
 # define FOV 60
-# define FOV_RAD (FOV * M_PI / 180)
 # define SPEED 4
 # define ROT_SPEED 0.05
 # define M_PI 3.14159265358979323846
 # define ROTATION_SPEED 0.045
 # define PLAYER_SPEED 4
+
+typedef struct s_wall
+{
+	int				t_pix;
+	int				b_pix;
+	double			texture_x;
+	mlx_texture_t	*texture;
+}	t_wall;
 
 typedef struct s_player
 {
@@ -65,6 +72,7 @@ typedef struct s_cub
 	t_player	*player;
 	t_ray		*ray;
 	t_data		*data;
+	t_wall		*wall;
 }	t_cub;
 
 #endif

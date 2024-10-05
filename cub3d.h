@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 11:58:20 by dkremer           #+#    #+#             */
-/*   Updated: 2024/10/01 13:47:52 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/10/04 16:09:18 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,13 @@ void	file_to_map(int fd, t_data *data, char *line);
 
 //rendering
 
-float	nor_angle(float angle);
 void	render_wall(t_cub *mlx, int ray);
 
+//rendering_utils.c
+float			nor_angle(float angle);
+double			get_texture_x(t_cub *game, mlx_texture_t *texture);
+mlx_texture_t	*get_textures(t_cub *game, int wall_hit);
+uint32_t		get_texture_color(mlx_texture_t *texture, int tex_x, int tex_y);
 //movement
 void	hook(t_cub *game, double move_x, double move_y);
 void	mlx_key(mlx_key_data_t keydata, void *ml);

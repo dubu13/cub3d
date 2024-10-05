@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:53:31 by dhasan            #+#    #+#             */
-/*   Updated: 2024/10/01 15:14:29 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/10/04 16:12:28 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	init_player(t_cub *cub)
 {
 	cub->player->p_x = cub->data->pos_x * TILE_SIZE + TILE_SIZE / 2;
 	cub->player->p_y = cub->data->pos_y * TILE_SIZE + TILE_SIZE / 2;
-	cub->player->fov = FOV_RAD;
+	cub->player->fov = (FOV * M_PI / 180);
 	cub->player->angle = M_PI;
 }
 
@@ -33,7 +33,7 @@ void	game_loop(void *ml)
 
 	mlx = ml;
 	mlx_delete_image(mlx->mlx, mlx->img);
-	mlx->img = mlx_new_image(mlx->mlx, SCREEN_WIDTH, SCREEN_HEIGHT);	// create new image
+	mlx->img = mlx_new_image(mlx->mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
 	hook(mlx, 0, 0);
 	raycasting(mlx);
 	mlx_image_to_window(mlx->mlx, mlx->img, 0, 0);
@@ -89,6 +89,7 @@ int	main(int argc, char **argv)
 		return (1);
 	}
 	parser(argv[1], data);
+	// print_data(data);
 	if (init_game(data))
 		msg_exit("Error\nInitialization failed.\n", 1);
 }

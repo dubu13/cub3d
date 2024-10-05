@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rendering.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkremer <dkremer@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:22:36 by dkremer           #+#    #+#             */
-/*   Updated: 2024/09/30 16:28:24 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/10/04 17:16:05 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,6 @@ void	my_mlx_pixel_put(t_cub *game, int x, int y, int color)
 	if (x < 0 || x >= SCREEN_WIDTH || y < 0 || y >= SCREEN_HEIGHT)
 		return ;
 	mlx_put_pixel(game->img, x, y, color);
-}
-
-float	nor_angle(float angle)
-{
-	while (angle < 0)
-		angle += (2 * M_PI);
-	while (angle > (2 * M_PI))
-		angle -= (2 * M_PI);
-	return (angle);
 }
 
 void	draw_floor_ceiling(t_cub *game, int ray, int t_pix, int b_pix)
@@ -40,32 +31,41 @@ void	draw_floor_ceiling(t_cub *game, int ray, int t_pix, int b_pix)
 		my_mlx_pixel_put(game, ray, i++, 0x89CFF3FF);
 }
 
-int	get_color(t_cub *game, int flag)
+void	draw_wall_segment(t_cub *game, int ray, t_wall *wall)
 {
-	game->ray->angle = nor_angle(game->ray->angle);
-	if (flag == 0)
+	double		step;
+	double		texture_pos;
+	int			tex_y;
+	uint32_t	color;
+	int			y_start;
+
+	step = (double)wall->texture->height / (double)(wall->b_pix - wall->t_pix);
+	texture_pos = 0;
+	y_start = wall->t_pix;
+
+	while (y_start < wall->b_pix)
 	{
-		if (game->ray->angle > M_PI / 2 && game->ray->angle < 3 * (M_PI / 2))
-			return (0xFF1493FF);
-		else
-			return (0x00FF7FFF);
-	}
-	else
-	{
-		if (game->ray->angle > 0 && game->ray->angle < M_PI)
-			return (0xFFD700FF);
-		else
-			return (0x8A2BE2FF);
+		tex_y = (int)texture_pos & (wall->texture->height - 1);
+		color = get_texture_color(wall->texture, wall->texture_x, tex_y);
+		my_mlx_pixel_put(game, ray, y_start, color);
+		texture_pos += step;
+		y_start++;
 	}
 }
 
 void	draw_wall(t_cub *game, int ray, int t_pix, int b_pix)
 {
-	int	color;
+	t_wall	*wall_data;
 
-	color = get_color(game, game->ray->wall_hit);
-	while (t_pix < b_pix)
-		my_mlx_pixel_put(game, ray, t_pix++, color);
+	wall_data = ft_calloc(1, sizeof(t_wall));
+
+	if (!wall_data)
+		msg_exit("Error: Failed to allocate memory for wall data", 1);
+	wall_data->texture = get_textures(game, game->ray->wall_hit);
+	wall_data->texture_x = get_texture_x(game, wall_data->texture);
+	wall_data->t_pix = t_pix;
+	wall_data->b_pix = b_pix;
+	draw_wall_segment(game, ray, wall_data);
 }
 
 void	render_wall(t_cub *mlx, int ray)
@@ -74,24 +74,15 @@ void	render_wall(t_cub *mlx, int ray)
 	double	b_pix;
 	double	t_pix;
 
-	// Correct the distance for fish-eye effect
 	mlx->ray->distance *= cos(nor_angle(mlx->ray->angle - mlx->player->angle));
-
-	// Calculate wall height
-	wall_h = (TILE_SIZE / mlx->ray->distance) * ((SCREEN_WIDTH / 2) / tan(mlx->player->fov / 2));
-
-	// Calculate top and bottom pixel positions
+	wall_h = (TILE_SIZE / mlx->ray->distance) * ((SCREEN_WIDTH / 2) \
+		/ tan(mlx->player->fov / 2));
 	b_pix = (SCREEN_HEIGHT / 2) + (wall_h / 2);
 	t_pix = (SCREEN_HEIGHT / 2) - (wall_h / 2);
-
-	// Clamp the pixel positions to screen boundaries
 	if (b_pix > SCREEN_HEIGHT)
 		b_pix = SCREEN_HEIGHT;
 	if (t_pix < 0)
-    	t_pix = 0;
-	// Draw the wall
+		t_pix = 0;
 	draw_wall(mlx, ray, t_pix, b_pix);
-
-	// Draw the floor and ceiling
 	draw_floor_ceiling(mlx, ray, t_pix, b_pix);
 }
