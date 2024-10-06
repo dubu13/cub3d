@@ -37,7 +37,10 @@ void	char_check(t_data *data)
 			if (!ft_strchr(" 01NSEW", data->map[y][x]))
 				msg_exit("Error\nMap with invalid char.", 1);
 			if (ft_strchr("NSEW", data->map[y][x]))
+			{
+				data->dir = data->map[y][x];
 				save_position(data, x, y);
+			}
 			x++;
 		}
 		if (x > data->width)

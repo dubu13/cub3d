@@ -69,7 +69,7 @@ void	parse_map(int fd, t_data *data, char *line)
 	file_to_map(fd, data, line);
 	char_check(data);
 	is_map_enclosed(data);
-	free(line);
+	// free(line);
 }
 
 void	read_file(char *file, t_data *data)

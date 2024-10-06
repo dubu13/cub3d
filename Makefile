@@ -3,7 +3,7 @@ NAME     = cub3d
 
 # Compiler and flags
 CC       = cc
-CFLAGS   = -Wall -Werror -Wextra -g -I.
+CFLAGS   = -Wall -Werror -Wextra -g -I. -fsanitize=address
 
 # MLX42 Flags
 MLXFLAGS = -lm -lglfw -lpthread
