@@ -16,6 +16,7 @@ void	parse_texture(char *contect, t_data *data)
 {
 	char	**texture;
 	char	*path;
+	int		i;
 
 	texture = ft_split(contect, ' ');
 	if (texture[1])
@@ -33,6 +34,9 @@ void	parse_texture(char *contect, t_data *data)
 			data->ea_texture = ft_strdup(path);
 		free(path);
 	}
+	i = 0;
+	while (texture[i])
+		free(texture[i++]);
 	free(texture);
 }
 
@@ -40,6 +44,7 @@ void	parse_color(char *contect, t_data *data, char type)
 {
 	char	**colors;
 	int		rgb[3];
+	int		i;
 
 	colors = ft_split(contect, ',');
 	if (!check_color(colors))
@@ -51,6 +56,9 @@ void	parse_color(char *contect, t_data *data, char type)
 		data->floor_c = convert_rgb(rgb[0], rgb[1], rgb[2], 255);
 	else
 		data->ceiling_c = convert_rgb(rgb[0], rgb[1], rgb[2], 255);
+	i = 0;
+	while (colors[i])
+		free(colors[i++]);
 	free(colors);
 }
 
@@ -61,6 +69,7 @@ void	parse_map(int fd, t_data *data, char *line)
 	file_to_map(fd, data, line);
 	char_check(data);
 	is_map_enclosed(data);
+	free(line);
 }
 
 void	read_file(char *file, t_data *data)

@@ -58,6 +58,7 @@ int	init_game(t_data *data)
 	mlx_loop_hook(cub.mlx, &game_loop, &cub);
 	mlx_key_hook(cub.mlx, &mlx_key, &cub);
 	mlx_loop(cub.mlx);
+	mlx_terminate(cub.mlx);
 	return (0);
 }
 
