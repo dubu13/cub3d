@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:53:31 by dhasan            #+#    #+#             */
-/*   Updated: 2024/10/05 17:50:35 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/06 19:12:26 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	main(int argc, char **argv)
 {
 	t_data	data;
 
-	// atexit(leaks);
+	atexit(leaks);
 	ft_bzero(&data, sizeof(t_data));
 	if (argc != 2)
 	{
@@ -93,8 +93,6 @@ int	main(int argc, char **argv)
 		printf("Usage: %s <map_file.cub>\n", argv[0]);
 		return (1);
 	}
-	// data->pos_x = -1;
-	// data->pos_y = -1;
 	parser(argv[1], &data);
 	// print_data(data);
 	if (init_game(&data))

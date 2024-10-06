@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 18:15:05 by dhasan            #+#    #+#             */
-/*   Updated: 2024/09/26 20:13:55 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/06 19:31:25 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,6 @@ void	char_check(t_data *data)
 
 void	file_to_map(int fd, t_data *data, char *line)
 {
-	unsigned int	y;
-
-	y = 0;
 	if (!line)
 		msg_exit("Error\nMissing map.", 1);
 	while (line)
@@ -65,6 +62,7 @@ void	file_to_map(int fd, t_data *data, char *line)
 	free(line);
 	data->map = ft_split(data->map_temp, '\n');
 	free(data->map_temp);
+	data->map_temp = NULL;
 	if (!data->map)
 		msg_exit("Error\nMemory allocation failed.\n", 1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dkremer <dkremer@student.42heilbronn.de    +#+  +:+       +#+        */
+/*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:08:29 by dkremer           #+#    #+#             */
-/*   Updated: 2024/08/22 13:11:24 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/10/06 19:24:00 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,13 @@
 
 void	ft_exit(t_cub *game)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (game->data->map[i])
 		free(game->data->map[i++]);
 	free(game->data->map);
+	game->data->map = NULL;
 	// free(game->data);
 	// free(game->player);
 	// free(game->ray);
@@ -30,6 +31,12 @@ void	ft_exit(t_cub *game)
 	// free(game->data->ea_texture);
 	mlx_delete_image(game->mlx, game->img);
 	mlx_close_window(game->mlx);
+	game->mlx = NULL;
+	game->img = NULL;
+	game->data = NULL;
+	game->player = NULL;
+	game->ray = NULL;
+	game->wall = NULL;
 	printf("GAME CLOSED\n");
 	exit(0);
 }

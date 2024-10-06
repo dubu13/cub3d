@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:43:35 by dhasan            #+#    #+#             */
-/*   Updated: 2024/10/05 17:53:53 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/06 20:10:32 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,12 @@ void	parse_texture(char *contect, t_data *data)
 		else if (!ft_strncmp(texture[0], "EA", 3))
 			data->ea_texture = ft_strdup(path);
 		free(path);
+		path = NULL;
 	}
 	i = 0;
 	while (texture[i])
 		free(texture[i++]);
-	free(texture);
+	texture = NULL;
 }
 
 void	parse_color(char *contect, t_data *data, char type)
@@ -59,7 +60,7 @@ void	parse_color(char *contect, t_data *data, char type)
 	i = 0;
 	while (colors[i])
 		free(colors[i++]);
-	free(colors);
+	colors = NULL;
 }
 
 void	parse_map(int fd, t_data *data, char *line)
@@ -69,33 +70,32 @@ void	parse_map(int fd, t_data *data, char *line)
 	file_to_map(fd, data, line);
 	char_check(data);
 	is_map_enclosed(data);
-	free(line);
 }
 
 void	read_file(char *file, t_data *data)
 {
-	char	*contect;
+	char	*content;
 	int		fd;
 
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 		msg_exit("Error\nFile does not exist or is not readable.", 1);
-	contect = skip_nl(fd);
-	while (contect)
+	content = skip_nl(fd);
+	while (content)
 	{
-		if (is_texture(contect))
-			parse_texture(contect, data);
-		else if (*contect == 'F')
-			parse_color(contect + 2, data, 'f');
-		else if (*contect == 'C')
-			parse_color(contect + 2, data, 'c');
+		if (is_texture(content))
+			parse_texture(content, data);
+		else if (*content == 'F')
+			parse_color(content + 2, data, 'f');
+		else if (*content == 'C')
+			parse_color(content + 2, data, 'c');
 		else
 		{
-			parse_map(fd, data, contect);
+			parse_map(fd, data, content);
 			break ;
 		}
-		free(contect);
-		contect = skip_nl(fd);
+		free(content);
+		content = skip_nl(fd);
 	}
 	close(fd);
 }
