@@ -39,9 +39,9 @@ double	get_texture_x(t_cub *game, mlx_texture_t *texture)
 	float	wall_x;
 
 	if (game->ray->wall_hit == 0)
-		wall_x = fmodf((double)game->ray->hit_y_v, (double)TILE_SIZE);
+		wall_x = fmodf((double)game->ray->hit_y, (double)TILE_SIZE);
 	else
-		wall_x = fmodf((double)game->ray->hit_x_h, (double)TILE_SIZE);
+		wall_x = fmodf((double)game->ray->hit_x, (double)TILE_SIZE);
 	return (wall_x / (double)TILE_SIZE * (double)texture->width);
 }
 

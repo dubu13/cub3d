@@ -67,4 +67,7 @@ uint32_t		get_texture_color(mlx_texture_t *texture, int tex_x, int tex_y);
 //movement
 void	hook(t_cub *game, double move_x, double move_y);
 void	mlx_key(mlx_key_data_t keydata, void *ml);
+
+void	ft_exit(t_cub *game);
+
 #endif

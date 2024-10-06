@@ -24,9 +24,13 @@ void	draw_floor_ceiling(t_cub *game, int ray, int t_pix, int b_pix)
 	int	i;
 
 	i = b_pix;
+	if (i > SCREEN_HEIGHT)
+		i = SCREEN_HEIGHT;
 	while (i < SCREEN_HEIGHT)
 		my_mlx_pixel_put(game, ray, i++, game->data->floor_c);
 	i = 0;
+	if (t_pix < 0)
+		t_pix = 0;
 	while (i < t_pix)
 		my_mlx_pixel_put(game, ray, i++, game->data->ceiling_c);
 }
@@ -54,16 +58,14 @@ void	draw_wall_segment(t_cub *game, int ray, t_wall *wall)
 
 void	draw_wall(t_cub *game, int ray, int t_pix, int b_pix)
 {
-	t_wall	*wall_data;
+	t_wall	wall_data;
 
-	wall_data = ft_calloc(1, sizeof(t_wall));
-	if (!wall_data)
-		msg_exit("Error: Failed to allocate memory for wall data", 1);
-	wall_data->texture = get_textures(game, game->ray->wall_hit);
-	wall_data->texture_x = get_texture_x(game, wall_data->texture);
-	wall_data->t_pix = t_pix;
-	wall_data->b_pix = b_pix;
-	draw_wall_segment(game, ray, wall_data);
+	ft_bzero(&wall_data, sizeof(t_wall));
+	wall_data.texture = get_textures(game, game->ray->wall_hit);
+	wall_data.texture_x = get_texture_x(game, wall_data.texture);
+	wall_data.t_pix = t_pix;
+	wall_data.b_pix = b_pix;
+	draw_wall_segment(game, ray, &wall_data);
 }
 
 void	render_wall(t_cub *mlx, int ray)
@@ -75,12 +77,11 @@ void	render_wall(t_cub *mlx, int ray)
 	mlx->ray->distance *= cos(nor_angle(mlx->ray->angle - mlx->player->angle));
 	wall_h = (TILE_SIZE / mlx->ray->distance) * (((double)SCREEN_WIDTH / 2) \
 		/ tan(mlx->player->fov / 2));
+	if (mlx->ray->distance == 0)
+		wall_h = TILE_SIZE * (((double)SCREEN_WIDTH / 2) \
+			/ tan(mlx->player->fov / 2));
 	b_pix = ((double)SCREEN_HEIGHT / 2) + (wall_h / 2);
 	t_pix = ((double)SCREEN_HEIGHT / 2) - (wall_h / 2);
-	if (b_pix > SCREEN_HEIGHT)
-		b_pix = SCREEN_HEIGHT;
-	if (t_pix < 0)
-		t_pix = 0;
 	draw_floor_ceiling(mlx, ray, t_pix, b_pix);
 	draw_wall(mlx, ray, t_pix, b_pix);
 }

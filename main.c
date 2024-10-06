@@ -41,23 +41,23 @@ void	game_loop(void *ml)
 
 int	init_game(t_data *data)
 {
-	t_cub	*cub;
+	t_cub		cub;
+	t_player	player;
+	t_ray		ray;
 
-	cub = ft_calloc(1, sizeof(t_cub));
-	if (!cub)
-		return (1);
-	cub->data = data;
-	if (!(cub->player = ft_calloc(1, sizeof(t_player))))
-		return (1);
-	if (!(cub->ray = ft_calloc(1, sizeof(t_ray))))
-		return (1);
+	ft_bzero(&cub, sizeof(t_cub));
+	ft_bzero(&player, sizeof(t_player));
+	ft_bzero(&ray, sizeof(t_ray));
+	cub.data = data;
+	cub.player = &player;
+	cub.ray = &ray;
 	mlx_set_setting(MLX_STRETCH_IMAGE, true);
-	if (!(cub->mlx = mlx_init(SCREEN_WIDTH, SCREEN_HEIGHT, "cub3d", true)))
+	if (!(cub.mlx = mlx_init(SCREEN_WIDTH, SCREEN_HEIGHT, "cub3d", true)))
 		return (1);
-	init_player(cub);
-	mlx_loop_hook(cub->mlx, &game_loop, cub);
-	mlx_key_hook(cub->mlx, &mlx_key, cub);
-	mlx_loop(cub->mlx);
+	init_player(&cub);
+	mlx_loop_hook(cub.mlx, &game_loop, &cub);
+	mlx_key_hook(cub.mlx, &mlx_key, &cub);
+	mlx_loop(cub.mlx);
 	return (0);
 }
 
@@ -75,13 +75,17 @@ int	init_game(t_data *data)
 // 	printf("Player position: %d, %d\n", data->pos_x, data->pos_y);
 // }
 
+void	leaks(void)
+{
+	system("leaks cub3d");
+}
+
 int	main(int argc, char **argv)
 {
-	t_data	*data;
+	t_data	data;
 
-	data = ft_calloc(1, sizeof(t_data));
-	if (!data)
-		msg_exit("Error\nMemory allocation failed.\n", 1);
+	// atexit(leaks);
+	ft_bzero(&data, sizeof(t_data));
 	if (argc != 2)
 	{
 		printf("Error\nInvalid number of arguments\n");
@@ -90,8 +94,9 @@ int	main(int argc, char **argv)
 	}
 	// data->pos_x = -1;
 	// data->pos_y = -1;
-	parser(argv[1], data);
+	parser(argv[1], &data);
 	// print_data(data);
-	if (init_game(data))
+	if (init_game(&data))
 		msg_exit("Error\nInitialization failed.\n", 1);
+	return (0);
 }

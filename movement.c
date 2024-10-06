@@ -33,9 +33,9 @@ void	mlx_key(mlx_key_data_t keydata, void *ml)
 	t_cub	*game;
 
 	game = ml;
-	// if (keydata.key == MLX_KEY_ESCAPE && (keydata.action == MLX_PRESS
-	// 		|| keydata.action == MLX_REPEAT))
-	// 	// ft_exit(game);
+	if (keydata.key == MLX_KEY_ESCAPE && (keydata.action == MLX_PRESS
+			|| keydata.action == MLX_REPEAT))
+		ft_exit(game);
 	if (keydata.key == MLX_KEY_A && (keydata.action == MLX_PRESS))
 		game->player->l_r = -1;
 	else if (keydata.key == MLX_KEY_D && (keydata.action == MLX_PRESS))

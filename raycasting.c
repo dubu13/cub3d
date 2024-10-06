@@ -47,8 +47,8 @@ float	get_h_inter(t_cub *game, float angle)
 		h_x += x_step;
 		h_y += y_step;
 	}
-	game->ray->hit_x_h = h_x;
-	game->ray->hit_y_h = h_y;
+	game->ray->hit_x = h_x;
+	// game->ray->hit_y_h = h_y;
 	return (sqrt(pow(h_x - game->player->p_x, 2) + pow(h_y - game->player->p_y,
 				2)));
 }
@@ -71,8 +71,8 @@ float	get_v_inter(t_cub *game, float angle)
 		v_x += x_step;
 		v_y += y_step;
 	}
-	game->ray->hit_x_v = v_x;
-	game->ray->hit_y_v = v_y;
+	// game->ray->hit_x_v = v_x;
+	game->ray->hit_y = v_y;
 	return (sqrt(pow(v_x - game->player->p_x, 2) + pow(v_y - game->player->p_y,
 				2)));
 }
