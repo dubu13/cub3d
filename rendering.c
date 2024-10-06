@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:22:36 by dkremer           #+#    #+#             */
-/*   Updated: 2024/10/05 22:45:15 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/10/06 12:55:04 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,14 @@ void	render_wall(t_cub *mlx, int ray)
 	double	t_pix;
 
 	mlx->ray->distance *= cos(nor_angle(mlx->ray->angle - mlx->player->angle));
-	wall_h = (TILE_SIZE / mlx->ray->distance) * ((SCREEN_WIDTH / 2) \
+	wall_h = (TILE_SIZE / mlx->ray->distance) * (((double)SCREEN_WIDTH / 2) \
 		/ tan(mlx->player->fov / 2));
-	b_pix = (SCREEN_HEIGHT / 2) + (wall_h / 2);
-	t_pix = (SCREEN_HEIGHT / 2) - (wall_h / 2);
+	b_pix = ((double)SCREEN_HEIGHT / 2) + (wall_h / 2);
+	t_pix = ((double)SCREEN_HEIGHT / 2) - (wall_h / 2);
 	if (b_pix > SCREEN_HEIGHT)
 		b_pix = SCREEN_HEIGHT;
 	if (t_pix < 0)
 		t_pix = 0;
-	draw_wall(mlx, ray, t_pix, b_pix);
 	draw_floor_ceiling(mlx, ray, t_pix, b_pix);
+	draw_wall(mlx, ray, t_pix, b_pix);
 }

@@ -6,20 +6,20 @@
 /*   By: dkremer <dkremer@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 15:35:03 by dkremer           #+#    #+#             */
-/*   Updated: 2024/10/01 13:48:27 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/10/06 12:22:38 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	dir_check(float angle, char c)
+int	dir_check(float angle, char axis)
 {
-	if (c == 'x')
+	if (axis == 'x')
 	{
 		if (angle > 0 && angle < M_PI)
 			return (1);
 	}
-	else if (c == 'y')
+	else if (axis == 'y')
 	{
 		if (angle > (M_PI / 2) && angle < (3 * M_PI) / 2)
 			return (1);

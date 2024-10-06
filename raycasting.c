@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 14:07:48 by dkremer           #+#    #+#             */
-/*   Updated: 2024/10/05 22:15:34 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/10/06 12:23:30 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	wall_hit(float x, float y, t_cub *game)
 	return (1);
 }
 
-float	get_h_inter(t_cub *game, float angle, float *hit_x, float *hit_y)
+float	get_h_inter(t_cub *game, float angle)
 {
 	float	h_x;
 	float	h_y;
@@ -38,7 +38,7 @@ float	get_h_inter(t_cub *game, float angle, float *hit_x, float *hit_y)
 	int		pixel;
 
 	set_steps(angle, &x_step, &y_step, 'x');
-	h_y = floor(game->player->p_y / TILE_SIZE) * TILE_SIZE;
+	h_y = floor((double)game->player->p_y / TILE_SIZE) * TILE_SIZE;
 	pixel = inter_check(angle, &h_y, &y_step, 1);
 	h_x = game->player->p_x + (h_y - game->player->p_y) / tan(angle);
 	set_step_direction(angle, &x_step, &y_step, 'x');
@@ -47,13 +47,13 @@ float	get_h_inter(t_cub *game, float angle, float *hit_x, float *hit_y)
 		h_x += x_step;
 		h_y += y_step;
 	}
-	*hit_x = h_x;
-	*hit_y = h_y;
+	game->ray->hit_x_h = h_x;
+	game->ray->hit_y_h = h_y;
 	return (sqrt(pow(h_x - game->player->p_x, 2) + pow(h_y - game->player->p_y,
 				2)));
 }
 
-float	get_v_inter(t_cub *game, float angle, float *hit_x, float *hit_y)
+float	get_v_inter(t_cub *game, float angle)
 {
 	float	v_x;
 	float	v_y;
@@ -62,7 +62,7 @@ float	get_v_inter(t_cub *game, float angle, float *hit_x, float *hit_y)
 	int		pixel;
 
 	set_steps(angle, &x_step, &y_step, 'y');
-	v_x = floor(game->player->p_x / TILE_SIZE) * TILE_SIZE;
+	v_x = floor((double)game->player->p_x / TILE_SIZE) * TILE_SIZE;
 	pixel = inter_check(angle, &v_x, &x_step, 0);
 	v_y = game->player->p_y + (v_x - game->player->p_x) * tan(angle);
 	set_step_direction(angle, &x_step, &y_step, 'y');
@@ -71,42 +71,36 @@ float	get_v_inter(t_cub *game, float angle, float *hit_x, float *hit_y)
 		v_x += x_step;
 		v_y += y_step;
 	}
-	*hit_x = v_x;
-	*hit_y = v_y;
+	game->ray->hit_x_v = v_x;
+	game->ray->hit_y_v = v_y;
 	return (sqrt(pow(v_x - game->player->p_x, 2) + pow(v_y - game->player->p_y,
 				2)));
 }
 
-void	raycasting(t_cub *mlx)
+void	raycasting(t_cub *game)
 {
 	double	h_inter;
 	double	v_inter;
 	int		ray;
-	float	hit_x;
-	float	hit_y;
 
 	ray = 0;
-	mlx->ray->angle = mlx->player->angle - (mlx->player->fov / 2);
+	game->ray->angle = game->player->angle - (game->player->fov / 2);
 	while (ray < SCREEN_WIDTH)
 	{
-		mlx->ray->wall_hit = 0;
-		h_inter = get_h_inter(mlx, nor_angle(mlx->ray->angle), &hit_x, &hit_y);
-		v_inter = get_v_inter(mlx, nor_angle(mlx->ray->angle), &hit_x, &hit_y);
+		game->ray->wall_hit = 0;
+		v_inter = get_v_inter(game, nor_angle(game->ray->angle));
+		h_inter = get_h_inter(game, nor_angle(game->ray->angle));
 		if (v_inter <= h_inter)
 		{
-			mlx->ray->distance = v_inter;
-			mlx->ray->hit_x = hit_x;
-			mlx->ray->hit_y = hit_y;
+			game->ray->distance = v_inter;
 		}
 		else
 		{
-			mlx->ray->distance = h_inter;
-			mlx->ray->hit_x = hit_x;
-			mlx->ray->hit_y = hit_y;
-			mlx->ray->wall_hit = 1;
+			game->ray->distance = h_inter;
+			game->ray->wall_hit = 1;
 		}
-		render_wall(mlx, ray);
+		render_wall(game, ray);
 		ray++;
-		mlx->ray->angle += (mlx->player->fov / SCREEN_WIDTH);
+		game->ray->angle += (game->player->fov / SCREEN_WIDTH);
 	}
 }

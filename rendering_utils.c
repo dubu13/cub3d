@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:47:14 by dhasan            #+#    #+#             */
-/*   Updated: 2024/10/05 22:45:22 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/10/06 12:36:59 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,14 @@ mlx_texture_t	*get_textures(t_cub *game, int wall_hit)
 
 	if (wall_hit == 0)
 	{
-		if (normalized_angle > M_PI / 2 && normalized_angle < 3 * (M_PI / 2))
+		if (dir_check(normalized_angle, 'y'))
 			texture = game->data->we_texture;
 		else
 			texture = game->data->ea_texture;
 	}
 	else
 	{
-		if (normalized_angle > 0 && normalized_angle < M_PI)
+		if (dir_check(normalized_angle, 'x'))
 			texture = game->data->so_texture;
 		else
 			texture = game->data->no_texture;
@@ -34,16 +34,15 @@ mlx_texture_t	*get_textures(t_cub *game, int wall_hit)
 	return (mlx_load_png(texture));
 }
 
-//fix this
 double	get_texture_x(t_cub *game, mlx_texture_t *texture)
 {
 	float	wall_x;
 
 	if (game->ray->wall_hit == 0)
-		wall_x = fmodf(game->ray->hit_y, TILE_SIZE);
+		wall_x = fmodf((double)game->ray->hit_y_v, (double)TILE_SIZE);
 	else
-		wall_x = fmodf(game->ray->hit_x, TILE_SIZE);
-	return (wall_x / TILE_SIZE * texture->width);
+		wall_x = fmodf((double)game->ray->hit_x_h, (double)TILE_SIZE);
+	return (wall_x / (double)TILE_SIZE * (double)texture->width);
 }
 
 uint32_t	get_texture_color(mlx_texture_t *texture, int tex_x, int tex_y)

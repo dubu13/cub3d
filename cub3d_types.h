@@ -47,8 +47,10 @@ typedef struct s_ray
 	double	angle;
 	double	distance;
 	int		wall_hit;
-	double	hit_x;
-	double	hit_y;
+	double	hit_x_h;
+	double	hit_y_h;
+	double	hit_x_v;
+	double	hit_y_v;
 }	t_ray;
 
 typedef struct s_data
