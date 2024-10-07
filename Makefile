@@ -3,7 +3,7 @@ NAME     = cub3d
 
 # Compiler and flags
 CC       = cc
-CFLAGS   = -Wall -Werror -Wextra -g -I. -fsanitize=address
+CFLAGS   = -Wall -Werror -Wextra -g -I.
 
 # MLX42 Flags
 MLXFLAGS = -lm -lglfw -lpthread
@@ -20,7 +20,7 @@ SRCS     = $(wildcard *.c parser/*.c)
 OBJS     = $(SRCS:%.c=$(BINDIR)/%.o)
 
 # MLX42 library
-MLX      = ./MLX42/build/libmlx42.a 
+MLX      = ./MLX42/build/libmlx42.a
 
 # Default target
 all: $(NAME)

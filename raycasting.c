@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 14:07:48 by dkremer           #+#    #+#             */
-/*   Updated: 2024/10/06 12:23:30 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/10/07 18:11:50 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ float	get_h_inter(t_cub *game, float angle)
 		h_y += y_step;
 	}
 	game->ray->hit_x = h_x;
-	// game->ray->hit_y_h = h_y;
 	return (sqrt(pow(h_x - game->player->p_x, 2) + pow(h_y - game->player->p_y,
 				2)));
 }
@@ -71,7 +70,6 @@ float	get_v_inter(t_cub *game, float angle)
 		v_x += x_step;
 		v_y += y_step;
 	}
-	// game->ray->hit_x_v = v_x;
 	game->ray->hit_y = v_y;
 	return (sqrt(pow(v_x - game->player->p_x, 2) + pow(v_y - game->player->p_y,
 				2)));

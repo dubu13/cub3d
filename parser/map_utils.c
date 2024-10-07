@@ -6,21 +6,23 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 18:15:05 by dhasan            #+#    #+#             */
-/*   Updated: 2024/10/06 19:31:25 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/07 17:44:06 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	save_position(t_data *data, unsigned int x, unsigned int y)
+int	save_position(t_data *data, unsigned int x, unsigned int y)
 {
 	if (data->pos_x != -1 || data->pos_y != -1)
-		msg_exit("Error\nMultiple player positions.", 1);
+		return (error("Multiple player positions."), 0);
 	data->pos_x = x;
 	data->pos_y = y;
+	data->dir = data->map[y][x];
+	return (1);
 }
 
-void	char_check(t_data *data)
+int	char_check(t_data *data)
 {
 	unsigned int	y;
 	unsigned int	x;
@@ -31,34 +33,33 @@ void	char_check(t_data *data)
 	{
 		x = 0;
 		if (data->map[y][0] == '\0')
-			msg_exit("Error\nInvalid map.", 1);
+			return (error("Invalid map."), 0);
 		while (data->map[y][x])
 		{
 			if (!ft_strchr(" 01NSEW", data->map[y][x]))
-				msg_exit("Error\nMap with invalid char.", 1);
+				return (error("Map with invalid char."), 0);
 			if (ft_strchr("NSEW", data->map[y][x]))
-			{
-				data->dir = data->map[y][x];
-				save_position(data, x, y);
-			}
+				if (!save_position(data, x, y))
+					return (0);
 			x++;
 		}
 		if (x > data->width)
 			data->width = x;
 		y++;
 	}
+	return (1);
 }
 
-void	file_to_map(int fd, t_data *data, char *line)
+int	file_to_map(int fd, t_data *data, char *line)
 {
 	if (!line)
-		msg_exit("Error\nMissing map.", 1);
+		return (error("Missing map."), 0);
 	while (line)
 	{
 		data->map_temp = ft_strjoin_gnl(data->map_temp, line);
 		free(line);
 		if (!data->map_temp)
-			msg_exit("Error\nMemory allocation failed.", 1);
+			return (error("Memory allocation failed."), 0);
 		data->height++;
 		line = get_next_line(fd);
 	}
@@ -67,5 +68,6 @@ void	file_to_map(int fd, t_data *data, char *line)
 	free(data->map_temp);
 	data->map_temp = NULL;
 	if (!data->map)
-		msg_exit("Error\nMemory allocation failed.\n", 1);
+		return (error("Memory allocation failed."), 0);
+	return (1);
 }

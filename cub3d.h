@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 11:58:20 by dkremer           #+#    #+#             */
-/*   Updated: 2024/10/05 17:54:34 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/07 17:56:22 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 # include <stdio.h>
 # include <stdbool.h>
 
-int		error(char *msg);
 t_data	*init_data();
 
 //raycasting
@@ -37,23 +36,22 @@ void	raycasting(t_cub *cub);
 int		inter_check(float angle, float *inter, float *step, int is_horizon);
 int		dir_check(float angle, char c);
 //paser.c
-void	check_extension(char *file);
-void	parser(char *file, t_data *data);
-//msg
-void	msg_exit(char *msg, int exit_code);
+int	check_extension(char *file);
+int	read_file(char *file, t_data *data);
+
 //checker.c
-void	is_map_enclosed(t_data *data);
-bool	check_color(char **rgb);
-bool	check_texture(char *contect);
+int	is_map_enclosed(t_data *data);
+int	check_color(char **rgb);
+int	check_texture(char *contect);
 //parser_utils.c
 char	*skip_nl(int fd);
 bool	is_texture(char *contect);
 bool	is_color(char *contect);
-char	*skip_info(int fd);
+// char	*skip_info(int fd);
 int32_t	convert_rgb(int r, int g, int b, int a);
 //map_utils.c
-void	char_check(t_data *data);
-void	file_to_map(int fd, t_data *data, char *line);
+int	char_check(t_data *data);
+int	file_to_map(int fd, t_data *data, char *line);
 
 //rendering
 
@@ -69,5 +67,7 @@ void	hook(t_cub *game, double move_x, double move_y);
 void	mlx_key(mlx_key_data_t keydata, void *ml);
 
 void	ft_exit(t_cub *game);
-
+void	free_2d_array(char **array);
+void	error(char *msg);
+void	free_data(t_data *data);
 #endif

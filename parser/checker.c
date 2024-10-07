@@ -6,22 +6,23 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:55:47 by dhasan            #+#    #+#             */
-/*   Updated: 2024/09/26 20:11:52 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/07 17:06:39 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	check_extension(char *file)
+int	check_extension(char *file)
 {
 	char	*extension;
 
 	extension = ft_strrchr(file, '.');
 	if (extension == NULL || ft_strncmp(extension, ".cub\0", 5) != 0)
-		msg_exit("Error\nMap should be in '.cub' format.", 1);
+		return (error("Map should be in '.cub' format."), 0);
+	return (1);
 }
 
-bool	check_texture(char *contect)
+int	check_texture(char *contect)
 {
 	int	fd;
 
@@ -29,21 +30,21 @@ bool	check_texture(char *contect)
 	if (fd == -1)
 	{
 		close(fd);
-		return (false);
+		return (0);
 	}
 	close(fd);
-	return (true);
+	return (1);
 }
 
-bool	check_color(char **rgb)
+int	check_color(char **rgb)
 {
 	if (!rgb[0] || !rgb[1] || !rgb[2])
-		return (false);
+		return (0);
 	if (ft_atoi(rgb[0]) < 0 || ft_atoi(rgb[0]) > 255
 		|| ft_atoi(rgb[1]) < 0 || ft_atoi(rgb[1]) > 255
 		|| ft_atoi(rgb[2]) < 0 || ft_atoi(rgb[2]) > 255)
-		return (false);
-	return (true);
+		return (0);
+	return (1);
 }
 
 int	check_around_position(t_data *data, unsigned int x, unsigned int y)
@@ -59,7 +60,7 @@ int	check_around_position(t_data *data, unsigned int x, unsigned int y)
 	return (1);
 }
 
-void	is_map_enclosed(t_data *data)
+int	is_map_enclosed(t_data *data)
 {
 	unsigned int	y;
 	unsigned int	x;
@@ -72,9 +73,10 @@ void	is_map_enclosed(t_data *data)
 		{
 			if (data->map[y][x] != '1' && data->map[y][x] != ' ')
 				if (!check_around_position(data, x, y))
-					msg_exit("Error\nMap is not enclosed by walls.", 1);
+					return (error("Map is not enclosed by walls."), 0);
 			x++;
 		}
 		y++;
 	}
+	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:45:31 by dhasan            #+#    #+#             */
-/*   Updated: 2024/10/05 17:53:47 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/07 17:03:49 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,17 +52,17 @@ bool	is_color(char *contect)
 	return (false);
 }
 
-char	*skip_info(int fd)
-{
-	char	*line;
+// char	*skip_info(int fd)
+// {
+// 	char	*line;
 
-	line = get_next_line(fd);
-	if (!line)
-		msg_exit("Error\nMissing information.\n", 1);
-	while (line && (is_texture(line) || *line == 'F' || *line == 'C'))
-	{
-		free(line);
-		line = get_next_line(fd);
-	}
-	return (line);
-}
+// 	line = get_next_line(fd);
+// 	if (!line)
+// 		msg_exit("Error\nMissing information.\n", 1);
+// 	while (line && (is_texture(line) || *line == 'F' || *line == 'C'))
+// 	{
+// 		free(line);
+// 		line = get_next_line(fd);
+// 	}
+// 	return (line);
+// }
