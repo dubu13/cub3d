@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:55:47 by dhasan            #+#    #+#             */
-/*   Updated: 2024/10/07 17:06:39 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/07 19:25:50 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ int	is_map_enclosed(t_data *data)
 		x = 0;
 		while (data->map[y][x] != '\0')
 		{
+			if (data->map[y][0] == '\n' )
+				return (error("Newline inside map."), 0);
 			if (data->map[y][x] != '1' && data->map[y][x] != ' ')
 				if (!check_around_position(data, x, y))
 					return (error("Map is not enclosed by walls."), 0);

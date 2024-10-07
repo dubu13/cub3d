@@ -6,12 +6,11 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:53:31 by dhasan            #+#    #+#             */
-/*   Updated: 2024/10/07 18:22:51 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/07 19:03:56 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include "cub3d_types.h"
 
 void	init_player(t_cub *cub)
 {

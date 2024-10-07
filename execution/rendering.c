@@ -6,11 +6,10 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:22:36 by dkremer           #+#    #+#             */
-/*   Updated: 2024/10/07 14:15:46 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/10/07 18:57:17 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "MLX42/include/MLX42/MLX42.h"
 #include "cub3d.h"
 
 void	my_mlx_pixel_put(t_cub *game, int x, int y, int color)

@@ -6,12 +6,12 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:43:35 by dhasan            #+#    #+#             */
-/*   Updated: 2024/10/07 17:38:40 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/07 19:49:07 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
+//leaks for invalid textures!!
 int	parse_texture(char *contect, t_data *data)
 {
 	char	**texture;
@@ -37,7 +37,7 @@ int	parse_texture(char *contect, t_data *data)
 	free_2d_array(texture);
 	return (1);
 }
-
+//check if all num
 int	parse_color(char *contect, t_data *data, char type)
 {
 	char	**colors;
@@ -65,6 +65,8 @@ int	parse_map(int fd, t_data *data, char *line)
 		return (0);
 	if (!char_check(data) || !is_map_enclosed(data))
 		return (0);
+	if (data->pos_x == -1 || data->pos_y == -1)
+		return (error("Player not found."), 0);
 	return (1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:08:29 by dkremer           #+#    #+#             */
-/*   Updated: 2024/10/07 18:24:38 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/07 18:45:57 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,6 @@ void	ft_exit(t_cub *game)
 	free_data(game->data);
 	mlx_delete_image(game->mlx, game->img);
 	mlx_close_window(game->mlx);
-	game->mlx = NULL;
-	game->img = NULL;
-	game->data = NULL;
-	game->player = NULL;
-	game->ray = NULL;
-	game->wall = NULL;
 	game = NULL;
 	printf("GAME CLOSED\n");
 	exit(0);
@@ -40,6 +34,7 @@ void	free_2d_array(char **array)
 	i = 0;
 	while (array[i])
 		free(array[i++]);
+	free(array);
 	array = NULL;
 }
 

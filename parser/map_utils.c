@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 18:15:05 by dhasan            #+#    #+#             */
-/*   Updated: 2024/10/07 17:44:06 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/07 19:44:40 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	char_check(t_data *data)
 	while (data->map[y])
 	{
 		x = 0;
-		if (data->map[y][0] == '\0')
+		if (data->map[y][0] == '\0' || data->map[y][0] == '\n')
 			return (error("Invalid map."), 0);
 		while (data->map[y][x])
 		{
@@ -46,6 +46,20 @@ int	char_check(t_data *data)
 		if (x > data->width)
 			data->width = x;
 		y++;
+	}
+	return (1);
+}
+
+int	check_nl(char *map)
+{
+	int	i;
+
+	i = 0;
+	while (map[i] != '\0')
+	{
+		if (map[i] == '\n' && map[i + 1] == '\n')
+			return (error("Extra newline in map."), 0);
+		i++;
 	}
 	return (1);
 }
@@ -64,6 +78,8 @@ int	file_to_map(int fd, t_data *data, char *line)
 		line = get_next_line(fd);
 	}
 	free(line);
+	if (!check_nl(data->map_temp))
+		return (free(data->map_temp), 0);
 	data->map = ft_split(data->map_temp, '\n');
 	free(data->map_temp);
 	data->map_temp = NULL;

@@ -3,7 +3,7 @@ NAME     = cub3d
 
 # Compiler and flags
 CC       = cc
-CFLAGS   = -Wall -Werror -Wextra -g -I.
+CFLAGS   = -Wall -Werror -Wextra -g -I./inc
 
 # MLX42 Flags
 MLXFLAGS = -lm -lglfw -lpthread
@@ -14,7 +14,7 @@ LIBFT = ./libft/libft.a
 BINDIR = bin
 
 # Source files
-SRCS     = $(wildcard *.c parser/*.c)
+SRCS     = $(wildcard *.c parser/*.c execution/*.c)
 
 # Object files (automatically place objects in the same subdirectory structure under BINDIR)
 OBJS     = $(SRCS:%.c=$(BINDIR)/%.o)
