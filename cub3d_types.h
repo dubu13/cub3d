@@ -22,6 +22,10 @@
 # define M_PI 3.14159265358979323846
 # define ROTATION_SPEED 0.045
 # define PLAYER_SPEED 4
+# define NORTH 4.7123889804 // 3 * PI / 2
+# define SOUTH 1.5707963268 // PI / 2
+# define EAST 0
+# define WEST 3.1415926535 // PI
 
 typedef struct s_wall
 {
@@ -55,6 +59,7 @@ typedef struct s_data
 {
 	char			**map;
 	char			*map_temp;
+	char			dir;
 	char			*no_texture;
 	char			*so_texture;
 	char			*we_texture;

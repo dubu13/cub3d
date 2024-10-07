@@ -24,7 +24,14 @@ void	init_player(t_cub *cub)
 	cub->player->p_x = cub->data->pos_x * TILE_SIZE + TILE_SIZE / 2;
 	cub->player->p_y = cub->data->pos_y * TILE_SIZE + TILE_SIZE / 2;
 	cub->player->fov = (FOV * M_PI / 180);
-	cub->player->angle = M_PI;
+	if (cub->data->dir == 'N')
+		cub->player->angle = NORTH;
+	else if (cub->data->dir == 'S')
+		cub->player->angle = SOUTH;
+	else if (cub->data->dir == 'E')
+		cub->player->angle = EAST;
+	else if (cub->data->dir == 'W')
+		cub->player->angle = WEST;
 }
 
 void	game_loop(void *ml)
