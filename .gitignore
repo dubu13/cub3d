@@ -37,3 +37,6 @@ my*
 ehthumbs.db
 Thumbs.db
 *.key
+.vscode
+cub3d
+MLX42
