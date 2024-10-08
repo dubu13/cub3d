@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:53:31 by dhasan            #+#    #+#             */
-/*   Updated: 2024/10/08 19:33:17 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/08 20:43:53 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int	init_game(t_data *data)
 	if (!cub.mlx)
 		return (0);
 	init_player(&cub);
+	mlx_close_hook(cub.mlx, &ft_exit, &cub);
 	mlx_loop_hook(cub.mlx, &game_loop, &cub);
 	mlx_key_hook(cub.mlx, &mlx_key, &cub);
 	mlx_loop(cub.mlx);

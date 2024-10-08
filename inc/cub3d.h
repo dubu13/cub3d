@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 11:58:20 by dkremer           #+#    #+#             */
-/*   Updated: 2024/10/08 18:31:58 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/08 20:46:28 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ uint32_t		get_texture_color(mlx_texture_t *texture, int tex_x, int tex_y);
 void			hook(t_cub *game, double move_x, double move_y);
 void			mlx_key(mlx_key_data_t keydata, void *ml);
 //msg_free.c
-void			ft_exit(t_cub *game);
+void	ft_exit(void *param);
 void			free_2d_array(char **array);
 void			error(char *msg);
 void			free_data(t_data *data);

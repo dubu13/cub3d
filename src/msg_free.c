@@ -6,18 +6,21 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:08:29 by dkremer           #+#    #+#             */
-/*   Updated: 2024/10/07 18:45:57 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/08 20:47:35 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	ft_exit(t_cub *game)
+void	ft_exit(void *param)
 {
-	free_data(game->data);
-	mlx_delete_image(game->mlx, game->img);
-	mlx_close_window(game->mlx);
-	game = NULL;
+	t_cub	*cub;
+
+	cub = (t_cub *)param;
+	free_data(cub->data);
+	mlx_delete_image(cub->mlx, cub->img);
+	mlx_close_window(cub->mlx);
+	cub = NULL;
 	printf("GAME CLOSED\n");
 	exit(0);
 }
