@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:43:35 by dhasan            #+#    #+#             */
-/*   Updated: 2024/10/07 19:49:07 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/08 14:20:52 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ int	parse_texture(char *contect, t_data *data)
 	{
 		path = ft_strtrim(texture[1], " \t\n\r\v\f");
 		if (texture[2] || !check_texture(path))
-			return (free_2d_array(texture), error("Invalid texture."), 0);
+			return (free(path), free_2d_array(texture),
+				error("Invalid texture."), 0);
 		if (!ft_strncmp(texture[0], "NO", 3))
 			data->no_texture = ft_strdup(path);
 		else if (!ft_strncmp(texture[0], "SO", 3))

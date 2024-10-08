@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:55:47 by dhasan            #+#    #+#             */
-/*   Updated: 2024/10/07 19:25:50 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/08 15:19:31 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,22 @@ int	check_texture(char *contect)
 	return (1);
 }
 
+int	ft_ischar(char *c)
+{
+	while(*c)
+	{
+		if ((*c >= '0' && *c <= '9'))
+			return (1);
+		c++;
+	}
+	return (0);
+}
+
 int	check_color(char **rgb)
 {
 	if (!rgb[0] || !rgb[1] || !rgb[2])
+		return (0);
+	if (!ft_ischar(rgb[0]) || !ft_ischar(rgb[1]) || !ft_ischar(rgb[2]))
 		return (0);
 	if (ft_atoi(rgb[0]) < 0 || ft_atoi(rgb[0]) > 255
 		|| ft_atoi(rgb[1]) < 0 || ft_atoi(rgb[1]) > 255
