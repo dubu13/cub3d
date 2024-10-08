@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/18 11:58:20 by dkremer           #+#    #+#             */
-/*   Updated: 2024/10/07 19:01:47 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/08 18:31:58 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,15 @@ int				check_extension(char *file);
 int				check_color(char **rgb);
 int				check_texture(char *contect);
 int				is_map_enclosed(t_data *data);
+int				save_position(t_data *data, unsigned int x, unsigned int y);
+int				check_data(t_data *data);
 //parser_utils.c
 char			*skip_nl(int fd);
 bool			is_texture(char *contect);
 bool			is_color(char *contect);
+int				ft_is_rgb(char *c);
 int32_t			convert_rgb(int r, int g, int b, int a);
+int	save_texture(t_data *data, char *texture, char *path);
 //map_utils.c
 int				char_check(t_data *data);
 int				file_to_map(int fd, t_data *data, char *line);

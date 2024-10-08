@@ -6,12 +6,12 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 16:43:35 by dhasan            #+#    #+#             */
-/*   Updated: 2024/10/08 14:20:52 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/10/08 18:31:43 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-//leaks for invalid textures!!
+
 int	parse_texture(char *contect, t_data *data)
 {
 	char	**texture;
@@ -24,27 +24,22 @@ int	parse_texture(char *contect, t_data *data)
 		if (texture[2] || !check_texture(path))
 			return (free(path), free_2d_array(texture),
 				error("Invalid texture."), 0);
-		if (!ft_strncmp(texture[0], "NO", 3))
-			data->no_texture = ft_strdup(path);
-		else if (!ft_strncmp(texture[0], "SO", 3))
-			data->so_texture = ft_strdup(path);
-		else if (!ft_strncmp(texture[0], "WE", 3))
-			data->we_texture = ft_strdup(path);
-		else if (!ft_strncmp(texture[0], "EA", 3))
-			data->ea_texture = ft_strdup(path);
+		if (!save_texture(data, texture[0], path))
+			return (free(path), free_2d_array(texture),
+				error("Multiple textures for one wall."), 0);
 		free(path);
 		path = NULL;
 	}
 	free_2d_array(texture);
 	return (1);
 }
-//check if all num
-int	parse_color(char *contect, t_data *data, char type)
+
+int	parse_color(char *content, t_data *data, char type)
 {
 	char	**colors;
 	int		rgb[3];
 
-	colors = ft_split(contect, ',');
+	colors = ft_split(content, ',');
 	if (!check_color(colors))
 		return (free_2d_array(colors), error("Invalid color."), 0);
 	rgb[0] = ft_atoi(colors[0]);
@@ -105,7 +100,7 @@ int	read_file(char *file, t_data *data)
 	if (fd == -1)
 		return (error("File does not exist or is not readable."), 0);
 	content = skip_nl(fd);
-	if (!save_content(content, data, fd))
+	if (!save_content(content, data, fd) || !check_data(data))
 		return (close(fd), 0);
 	close(fd);
 	return (1);

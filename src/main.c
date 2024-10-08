@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:53:31 by dhasan            #+#    #+#             */
-/*   Updated: 2024/10/07 19:03:56 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/08 19:33:17 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ int	init_game(t_data *data)
 	mlx_key_hook(cub.mlx, &mlx_key, &cub);
 	mlx_loop(cub.mlx);
 	mlx_terminate(cub.mlx);
+	ft_exit(&cub);
 	return (1);
 }
 

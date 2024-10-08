@@ -14,7 +14,7 @@ LIBFT = ./libft/libft.a
 BINDIR = bin
 
 # Source files
-SRCS     = $(wildcard *.c parser/*.c execution/*.c)
+SRCS     = $(wildcard src/*.c src/parsing/*.c src/execution/*.c)
 
 # Object files (automatically place objects in the same subdirectory structure under BINDIR)
 OBJS     = $(SRCS:%.c=$(BINDIR)/%.o)
@@ -31,13 +31,13 @@ $(NAME): $(LIBFT) $(MLX) $(OBJS)
 
 # Create bin directories if they don't exist
 $(BINDIR):
-	@mkdir -p $(BINDIR) $(BINDIR)/parser
+	@mkdir -p $(BINDIR) $(BINDIR)src/parsing $(BINDIR)src/execution
 
 # MLX42 library
 $(MLX):
 	@if [ ! -d "MLX42" ]; then \
       git clone https://github.com/codam-coding-college/MLX42.git && \
-      cd MLX42 && cmake -B build && cmake --build build -j4; \
+      cd MLX42 && git checkout tags/v2.3.4 && cmake -B build && cmake --build build -j4; \
 	fi
 
 # Compile .c files into .o files

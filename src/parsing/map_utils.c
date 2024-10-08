@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 18:15:05 by dhasan            #+#    #+#             */
-/*   Updated: 2024/10/07 19:44:40 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/08 17:59:09 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,34 +22,6 @@ int	save_position(t_data *data, unsigned int x, unsigned int y)
 	return (1);
 }
 
-int	char_check(t_data *data)
-{
-	unsigned int	y;
-	unsigned int	x;
-
-	y = 0;
-	x = 0;
-	while (data->map[y])
-	{
-		x = 0;
-		if (data->map[y][0] == '\0' || data->map[y][0] == '\n')
-			return (error("Invalid map."), 0);
-		while (data->map[y][x])
-		{
-			if (!ft_strchr(" 01NSEW", data->map[y][x]))
-				return (error("Map with invalid char."), 0);
-			if (ft_strchr("NSEW", data->map[y][x]))
-				if (!save_position(data, x, y))
-					return (0);
-			x++;
-		}
-		if (x > data->width)
-			data->width = x;
-		y++;
-	}
-	return (1);
-}
-
 int	check_nl(char *map)
 {
 	int	i;
@@ -58,7 +30,7 @@ int	check_nl(char *map)
 	while (map[i] != '\0')
 	{
 		if (map[i] == '\n' && map[i + 1] == '\n')
-			return (error("Extra newline in map."), 0);
+			return (error("Invalid map/map info."), 0);
 		i++;
 	}
 	return (1);
