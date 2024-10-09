@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:22:36 by dkremer           #+#    #+#             */
-/*   Updated: 2024/10/09 16:11:49 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/10/09 19:37:34 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,8 @@ void	render_wall(t_cub *game, int ray)
 	double	b_pix;
 	double	t_pix;
 
-	game->ray->distance *= cos(nor_angle(game->ray->angle - game->player->angle));
+	game->ray->distance *= cos(nor_angle(game->ray->angle\
+		- game->player->angle));
 	wall_h = (TILE_SIZE / game->ray->distance) * (((double)SCREEN_WIDTH / 2) \
 		/ tan(game->player->fov / 2));
 	if (game->ray->distance == 0)
