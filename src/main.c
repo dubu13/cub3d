@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:53:31 by dhasan            #+#    #+#             */
-/*   Updated: 2024/10/08 20:43:53 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/10/09 15:12:40 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,16 @@ void	init_player(t_cub *cub)
 		cub->player->angle = WEST;
 }
 
-void	game_loop(void *ml)
+void	game_loop(void *param)
 {
-	t_cub	*mlx;
+	t_cub	*cub;
 
-	mlx = ml;
-	mlx_delete_image(mlx->mlx, mlx->img);
-	mlx->img = mlx_new_image(mlx->mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
-	hook(mlx, 0, 0);
-	raycasting(mlx);
-	mlx_image_to_window(mlx->mlx, mlx->img, 0, 0);
+	cub = param;
+	mlx_delete_image(cub->mlx, cub->img);
+	cub->img = mlx_new_image(cub->mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
+	hook(cub, 0, 0);
+	raycasting(cub);
+	mlx_image_to_window(cub->mlx, cub->img, 0, 0);
 }
 
 int	init_game(t_data *data)

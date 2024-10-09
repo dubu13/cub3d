@@ -14,7 +14,17 @@ LIBFT = ./libft/libft.a
 BINDIR = bin
 
 # Source files
-SRCS     = $(wildcard src/*.c src/parsing/*.c src/execution/*.c)
+SRCS     = src/main.c src/msg_free.c \
+					 src/parsing/map_utils.c \
+					 src/parsing/parser.c \
+						src/parsing/parser_utils.c \
+						src/parsing/checker.c \
+						src/parsing/map_checker.c \
+  					src/execution/movement.c \
+ 						src/execution/raycasting.c \
+	 					src/execution/raycasting_utils.c \
+ 						src/execution/rendering.c \
+ 						src/execution/rendering_utils.c \
 
 # Object files (automatically place objects in the same subdirectory structure under BINDIR)
 OBJS     = $(SRCS:%.c=$(BINDIR)/%.o)
@@ -47,10 +57,14 @@ $(BINDIR)/%.o: %.c | $(BINDIR)
 
 # Linking libft
 $(LIBFT):
-	@make -C libft
-
-submodule:
-	git submodule update --init --recursive
+	@if [ ! -d "libft" ]; then \
+		echo "Cloning libft..."; \
+		git clone git@github.com:ygalsk/libft.git libft && \
+		git submodule update --init --recursive && \
+		make -C libft; \
+	else \
+		make -C libft; \
+	fi
 
 # Remove all object files
 clean:

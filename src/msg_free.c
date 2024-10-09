@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:08:29 by dkremer           #+#    #+#             */
-/*   Updated: 2024/10/08 20:47:35 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/10/09 15:10:22 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	ft_exit(void *param)
 {
 	t_cub	*cub;
 
-	cub = (t_cub *)param;
+	cub = param;
 	free_data(cub->data);
 	mlx_delete_image(cub->mlx, cub->img);
 	mlx_close_window(cub->mlx);
