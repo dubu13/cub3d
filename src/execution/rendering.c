@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 12:22:36 by dkremer           #+#    #+#             */
-/*   Updated: 2024/10/07 18:57:17 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/09 16:11:49 by dkremer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,20 +69,20 @@ void	draw_wall(t_cub *game, int ray, int t_pix, int b_pix)
 	mlx_delete_texture(wall_data.texture);
 }
 
-void	render_wall(t_cub *mlx, int ray)
+void	render_wall(t_cub *game, int ray)
 {
 	double	wall_h;
 	double	b_pix;
 	double	t_pix;
 
-	mlx->ray->distance *= cos(nor_angle(mlx->ray->angle - mlx->player->angle));
-	wall_h = (TILE_SIZE / mlx->ray->distance) * (((double)SCREEN_WIDTH / 2) \
-		/ tan(mlx->player->fov / 2));
-	if (mlx->ray->distance == 0)
+	game->ray->distance *= cos(nor_angle(game->ray->angle - game->player->angle));
+	wall_h = (TILE_SIZE / game->ray->distance) * (((double)SCREEN_WIDTH / 2) \
+		/ tan(game->player->fov / 2));
+	if (game->ray->distance == 0)
 		wall_h = TILE_SIZE * (((double)SCREEN_WIDTH / 2) \
-			/ tan(mlx->player->fov / 2));
+			/ tan(game->player->fov / 2));
 	b_pix = ((double)SCREEN_HEIGHT / 2) + (wall_h / 2);
 	t_pix = ((double)SCREEN_HEIGHT / 2) - (wall_h / 2);
-	draw_floor_ceiling(mlx, ray, t_pix, b_pix);
-	draw_wall(mlx, ray, t_pix, b_pix);
+	draw_floor_ceiling(game, ray, t_pix, b_pix);
+	draw_wall(game, ray, t_pix, b_pix);
 }
