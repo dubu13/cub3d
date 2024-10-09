@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/08 17:58:32 by dhasan            #+#    #+#             */
-/*   Updated: 2024/10/08 17:59:30 by dhasan           ###   ########.fr       */
+/*   Updated: 2024/10/09 19:26:07 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,9 @@ int	char_check(t_data *data)
 
 int	check_around_position(t_data *data, unsigned int x, unsigned int y)
 {
+	unsigned int	prev_len;
+
+	prev_len = ft_strlen(data->map[y - 1]);
 	if (x == 0 || x == data->width - 1 || y == 0 || y == data->height - 1)
 		return (0);
 	else if (data->map[y - 1][x] == ' ' || data->map[y][x - 1] == ' ' || \
@@ -49,6 +52,8 @@ int	check_around_position(t_data *data, unsigned int x, unsigned int y)
 		return (0);
 	else if (data->map[y - 1][x] == '\0' || data->map[y][x - 1] == '\0' || \
 		data->map[y][x + 1] == '\0' || data->map[y + 1][x] == '\0')
+		return (0);
+	else if (x > prev_len)
 		return (0);
 	return (1);
 }

@@ -1,5 +1,5 @@
 # Name of the binary
-NAME     = cub3d
+NAME     = cub3D
 
 # Compiler and flags
 CC       = cc

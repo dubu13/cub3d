@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/03 15:53:31 by dhasan            #+#    #+#             */
-/*   Updated: 2024/10/09 15:12:40 by dkremer          ###   ########.fr       */
+/*   Updated: 2024/10/09 19:33:26 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,16 +65,16 @@ int	init_game(t_data *data)
 	return (1);
 }
 
-void	leaks(void)
-{
-	system("leaks cub3d");
-}
+// void	leaks(void)
+// {
+// 	system("leaks cub3D");
+// }
+// atexit(leaks);
 
 int	main(int argc, char **argv)
 {
 	t_data	data;
 
-	atexit(leaks);
 	ft_bzero(&data, sizeof(t_data));
 	if (argc != 2)
 	{
