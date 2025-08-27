@@ -1,92 +1,108 @@
 # Name of the binary
-NAME     = cub3D
+NAME = cub3D_web
+SHELL := /bin/bash
 
 # Compiler and flags
-CC       = cc
-CFLAGS   = -Wall -Werror -Wextra -g -I./inc
+CC = emcc
+CFLAGS = -Wall -Werror -Wextra -g -I./inc
 
-# MLX42 Flags
-MLXFLAGS = -lm -lglfw -lpthread
+# Emscripten-specific flags
+WEBFLAGS = -s USE_GLFW=3 -s USE_WEBGL2=1 -s WASM=1 -s ASYNCIFY \
+			-s ALLOW_MEMORY_GROWTH=1 -s NO_EXIT_RUNTIME=1 \
+			--preload-file maps@/maps \
+			--preload-file textures@/textures \
+			-s EXPORTED_RUNTIME_METHODS='["requestFullscreen"]'
+
+# Linker flags for emscripten (silence the warning and strip debug info)
+LDFLAGS = -Wno-limited-postlink-optimizations -g0
 
 LIBFT = ./libft/libft.a
-
-# Binary Folder
 BINDIR = bin
+MLX = ./MLX42/build/libmlx42.a
 
-# Source files
-SRCS     = src/main.c src/msg_free.c \
-					 src/parsing/map_utils.c \
-					 src/parsing/parser.c \
-						src/parsing/parser_utils.c \
-						src/parsing/checker.c \
-						src/parsing/map_checker.c \
-  					src/execution/movement.c \
- 						src/execution/raycasting.c \
-	 					src/execution/raycasting_utils.c \
- 						src/execution/rendering.c \
- 						src/execution/rendering_utils.c \
+# Source files (auto-discover recursively)
+SRCS := $(shell find src -type f -name '*.c')
 
-# Object files (automatically place objects in the same subdirectory structure under BINDIR)
-OBJS     = $(SRCS:%.c=$(BINDIR)/%.o)
+OBJS := $(patsubst %.c,$(BINDIR)/%.o,$(SRCS))
 
-# MLX42 library
-MLX      = ./MLX42/build/libmlx42.a
+
+.SILENT:  # Commented out for debugging
 
 # Default target
-all: $(NAME)
+all: $(NAME).html
 
-$(NAME): $(LIBFT) $(MLX) $(OBJS)
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT) $(MLX) $(MLXFLAGS)
-	@echo $(GREEN)"Building $(NAME)"$(DEFAULT);
+# Ensure both emcc and emcmake are available
+check-emscripten:
+	@command -v emcc >/dev/null 2>&1 || { echo "emcc not found"; exit 1; }
+	@command -v emcmake >/dev/null 2>&1 || { echo "emcmake not found"; exit 1; }
 
-# Create bin directories if they don't exist
+# Ensure bin directory exists before building objects
 $(BINDIR):
-	@mkdir -p $(BINDIR) $(BINDIR)src/parsing $(BINDIR)src/execution
+	@echo $(GREEN)"Creating directories...$(DEFAULT)"
+	@mkdir -p $(BINDIR) $(BINDIR)/src/parsing $(BINDIR)/src/execution
 
-# MLX42 library
-$(MLX):
-	@if [ ! -d "MLX42" ]; then \
-      git clone https://github.com/codam-coding-college/MLX42.git && \
-      cd MLX42 && git checkout tags/v2.3.4 && cmake -B build && cmake --build build -j4; \
-	fi
-
-# Compile .c files into .o files
+# Compile .c files into .o files with emcc
 $(BINDIR)/%.o: %.c | $(BINDIR)
-	@mkdir -p $(dir $@)  # Ensure any needed subdirectories are created
+	@echo $(GREEN)"Compiling...$(DEFAULT)"
+	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-# Linking libft
+# Linking libft (reclone if missing, then build for emscripten)
 $(LIBFT):
-	@if [ ! -d "libft" ]; then \
-		echo "Cloning libft..."; \
-		git clone git@github.com:ygalsk/libft.git libft && \
-		git submodule update --init --recursive && \
-		make -C libft; \
-	else \
-		make -C libft; \
+	@if [ ! -d "libft" ] || [ ! -f "libft/Makefile" ]; then \
+		echo $(GREEN)"Cloning libft..."$(DEFAULT); \
+		rm -rf libft; \
+		git clone https://github.com/ygalsk/libft.git libft; \
+		echo $(GREEN)"Building libft for web..."$(DEFAULT); \
+		$(MAKE) -s --no-print-directory -C libft fclean; \
+		$(MAKE) -s --no-print-directory -C libft CC=$(CC) AR=emar RANLIB=emranlib; \
+		echo $(GREEN)"Built libft (web)"$(DEFAULT); \
+	elif [ ! -f "$(LIBFT)" ]; then \
+		echo $(GREEN)"Building libft for web..."$(DEFAULT); \
+		$(MAKE) -s --no-print-directory -C libft fclean; \
+		$(MAKE) -s --no-print-directory -C libft CC=$(CC) AR=emar RANLIB=emranlib; \
+		echo $(GREEN)"Built libft (web)"$(DEFAULT); \
 	fi
+
+# MLX42 library for Emscripten (robust rebuild)
+$(MLX):
+	@echo $(GREEN)"Building MLX42 (web)..."$(DEFAULT)
+	@if [ ! -d "MLX42" ]; then \
+		git clone --depth=1 --branch v2.3.4 https://github.com/codam-coding-college/MLX42.git MLX42; \
+	fi
+	@cd MLX42 && emcmake cmake -B build -DDEBUG=1 >/dev/null 2>&1
+	@cd MLX42 && cmake --build build -j >/dev/null 2>&1
+	@[ -f "$(MLX)" ] || { echo $(RED)"Failed to build MLX42"$(DEFAULT); exit 1; }
+	@echo $(GREEN)"MLX42 ready"$(DEFAULT)
+
+# Build HTML and bust JS cache inside it
+$(NAME).html: check-emscripten $(LIBFT) $(MLX) $(OBJS)
+	@echo "Linking: $(NAME).html"
+	@$(CC) $(WEBFLAGS) $(LDFLAGS) -o $@ $(OBJS) $(LIBFT) $(MLX)
+	@v=$$(date +%s); sed -i "s#src=\"$(NAME).js\"#src=\"$(NAME).js?v=$$v\"#g" $(NAME).html || true
+	@echo "Built: $(NAME).html (js cache-busted ?v=$$v)"
 
 # Remove all object files
 clean:
 	@rm -rf $(BINDIR)
-	@make -C libft clean
+	@[ -d libft ] && [ -f libft/Makefile ] && $(MAKE) -s --no-print-directory -C libft clean || true
 	@echo $(RED)"Removing $(NAME) object files"$(DEFAULT);
 
-# Remove all files
+# Remove all generated web artifacts (fixed name + any old versioned copies)
 fclean: clean
-	@rm -f $(NAME)
+	@rm -f $(NAME).html $(NAME).js $(NAME).wasm $(NAME).data $(NAME)-*.html
 	@rm -rf MLX42
-	@make -C libft fclean
-	@echo $(RED)"Removing $(NAME) and MLX42"$(DEFAULT);
+	@[ -d libft ] && [ -f libft/Makefile ] && $(MAKE) -s --no-print-directory -C libft fclean || true
+	@rm -rf libft
+	@echo $(RED)"Removing web files and MLX42"$(DEFAULT);
 
 # Rebuild everything
 re: fclean all
-	@echo $(GREEN)"Rebuilding everything"$(DEFAULT);
+	@echo $(GREEN)"Rebuilding web version"$(DEFAULT);
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re check-emscripten
 
 # Colours
 DEFAULT = "\033[39m"
 GREEN   = "\033[32m"
 RED     = "\033[31m"
-
