@@ -4,7 +4,7 @@ SHELL := /bin/bash
 
 # Compiler and flags
 CC = emcc
-CFLAGS = -Wall -Werror -Wextra -g -I./inc
+CFLAGS = -Wall -Werror -Wextra -O2 -g -I./inc
 
 # Emscripten-specific flags
 WEBFLAGS = -s USE_GLFW=3 -s USE_WEBGL2=1 -s WASM=1 -s ASYNCIFY \
@@ -17,8 +17,8 @@ WEBFLAGS = -s USE_GLFW=3 -s USE_WEBGL2=1 -s WASM=1 -s ASYNCIFY \
 LDFLAGS = -Wno-limited-postlink-optimizations -g0
 
 LIBFT = ./libft/libft.a
-BINDIR = bin
 MLX = ./MLX42/build/libmlx42.a
+BINDIR = bin
 
 # Source files (auto-discover recursively)
 SRCS := $(shell find src -type f -name '*.c')
@@ -26,7 +26,7 @@ SRCS := $(shell find src -type f -name '*.c')
 OBJS := $(patsubst %.c,$(BINDIR)/%.o,$(SRCS))
 
 
-.SILENT:  # Commented out for debugging
+.SILENT:
 
 # Default target
 all: $(NAME).html
@@ -38,12 +38,10 @@ check-emscripten:
 
 # Ensure bin directory exists before building objects
 $(BINDIR):
-	@echo $(GREEN)"Creating directories...$(DEFAULT)"
 	@mkdir -p $(BINDIR) $(BINDIR)/src/parsing $(BINDIR)/src/execution
 
 # Compile .c files into .o files with emcc
 $(BINDIR)/%.o: %.c | $(BINDIR)
-	@echo $(GREEN)"Compiling...$(DEFAULT)"
 	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) -c $< -o $@
 
@@ -51,18 +49,11 @@ $(BINDIR)/%.o: %.c | $(BINDIR)
 $(LIBFT):
 	@if [ ! -d "libft" ] || [ ! -f "libft/Makefile" ]; then \
 		echo $(GREEN)"Cloning libft..."$(DEFAULT); \
-		rm -rf libft; \
 		git clone https://github.com/ygalsk/libft.git libft; \
-		echo $(GREEN)"Building libft for web..."$(DEFAULT); \
-		$(MAKE) -s --no-print-directory -C libft fclean; \
-		$(MAKE) -s --no-print-directory -C libft CC=$(CC) AR=emar RANLIB=emranlib; \
-		echo $(GREEN)"Built libft (web)"$(DEFAULT); \
-	elif [ ! -f "$(LIBFT)" ]; then \
-		echo $(GREEN)"Building libft for web..."$(DEFAULT); \
-		$(MAKE) -s --no-print-directory -C libft fclean; \
-		$(MAKE) -s --no-print-directory -C libft CC=$(CC) AR=emar RANLIB=emranlib; \
-		echo $(GREEN)"Built libft (web)"$(DEFAULT); \
 	fi
+		echo $(GREEN)"Building libft for web..."$(DEFAULT); \
+		$(MAKE) -s --no-print-directory -C libft fclean; \
+		$(MAKE) -s --no-print-directory -C libft CC=$(CC) AR=emar RANLIB=emranlib; \
 
 # MLX42 library for Emscripten (robust rebuild)
 $(MLX):
@@ -73,24 +64,23 @@ $(MLX):
 	@cd MLX42 && emcmake cmake -B build -DDEBUG=1 >/dev/null 2>&1
 	@cd MLX42 && cmake --build build -j >/dev/null 2>&1
 	@[ -f "$(MLX)" ] || { echo $(RED)"Failed to build MLX42"$(DEFAULT); exit 1; }
-	@echo $(GREEN)"MLX42 ready"$(DEFAULT)
 
 # Build HTML and bust JS cache inside it
 $(NAME).html: check-emscripten $(LIBFT) $(MLX) $(OBJS)
 	@echo "Linking: $(NAME).html"
 	@$(CC) $(WEBFLAGS) $(LDFLAGS) -o $@ $(OBJS) $(LIBFT) $(MLX)
-	@v=$$(date +%s); sed -i "s#src=\"$(NAME).js\"#src=\"$(NAME).js?v=$$v\"#g" $(NAME).html || true
-	@echo "Built: $(NAME).html (js cache-busted ?v=$$v)"
+	@v=$$(date +%s); sed -i "s
 
 # Remove all object files
 clean:
 	@rm -rf $(BINDIR)
-	@[ -d libft ] && [ -f libft/Makefile ] && $(MAKE) -s --no-print-directory -C libft clean || true
+	@rm -f $(NAME).html $(NAME).js $(NAME).wasm $(NAME).data $(NAME)-*.html
+# 	@[ -d libft ] && [ -f libft/Makefile ] && $(MAKE) -s --no-print-directory -C libft clean || true
 	@echo $(RED)"Removing $(NAME) object files"$(DEFAULT);
 
 # Remove all generated web artifacts (fixed name + any old versioned copies)
 fclean: clean
-	@rm -f $(NAME).html $(NAME).js $(NAME).wasm $(NAME).data $(NAME)-*.html
+# 	@rm -f $(NAME).html $(NAME).js $(NAME).wasm $(NAME).data $(NAME)-*.html
 	@rm -rf MLX42
 	@[ -d libft ] && [ -f libft/Makefile ] && $(MAKE) -s --no-print-directory -C libft fclean || true
 	@rm -rf libft

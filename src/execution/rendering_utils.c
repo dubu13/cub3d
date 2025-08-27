@@ -6,7 +6,7 @@
 /*   By: dhasan <dhasan@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/04 15:47:14 by dhasan            #+#    #+#             */
-/*   Updated: 2024/10/06 12:36:59 by dkremer          ###   ########.fr       */
+/*   Updated: 2025/08/27 19:02:10 by dhasan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ uint32_t	get_texture_color(mlx_texture_t *texture, int tex_x, int tex_y)
 	uint8_t	*pixel;
 
 	pixel = &texture->pixels[(tex_y * texture->width + tex_x) * 4];
-	return ((pixel[0] << 24) | (pixel[1] << 16) | (pixel[2] << 8) | pixel[3]);
+	// return ((pixel[0] << 24) | (pixel[1] << 16) | (pixel[2] << 8) | pixel[3]);
+	return ((pixel[0] << 24) | (pixel[1] << 16) | (pixel[2] << 8) | 0xFF);
 }
 
 float	nor_angle(float angle)
