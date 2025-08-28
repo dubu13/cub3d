@@ -69,7 +69,7 @@ $(MLX):
 $(NAME).html: check-emscripten $(LIBFT) $(MLX) $(OBJS)
 	@echo "Linking: $(NAME).html"
 	@$(CC) $(WEBFLAGS) $(LDFLAGS) -o $@ $(OBJS) $(LIBFT) $(MLX)
-	@v=$$(date +%s); sed -i "s
+	@v=$$(date +%s); sed -i "s#src=\"$(NAME).js\"#src=\"$(NAME).js?v=$$v\"#g" $(NAME).html || true
 
 # Remove all object files
 clean:
